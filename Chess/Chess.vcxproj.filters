@@ -44,5 +44,8 @@
     <ClInclude Include="Square.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VectorUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

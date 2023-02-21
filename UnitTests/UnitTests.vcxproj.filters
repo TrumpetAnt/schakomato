@@ -4,9 +4,11 @@
     <ClCompile Include="RendererTests.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="MovementTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="MovementTests.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

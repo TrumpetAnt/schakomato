@@ -45,6 +45,7 @@ public:
 	};
 
 	std::vector<Piece*>* GetBoard() { return this->board; };
+	void Move(std::string notation);
 private:
 	std::vector<Piece*>* board;
 };

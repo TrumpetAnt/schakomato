@@ -11,6 +11,10 @@ public:
 	}
 	Square GetPosition() { return square; };
 	PieceType GetPieceType() { return type; };
+
+	inline bool operator==(const Piece& a) {
+		return this->square == a.square;
+	}
 	bool operator()(const Piece& a, const Piece& b) const {
 		return a.square.file < b.square.file;
 	}
@@ -19,4 +23,3 @@ private:
 	int player;
 	Square square;
 };
-

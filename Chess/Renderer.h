@@ -29,10 +29,8 @@ public:
 		std::string res;
 		std::string s;
 		res += "+---+---+---+---+---+---+---+---+\n";
-		std::cout << "+---+---+---+---+---+---+---+---+" << std::endl;
 		for (int i = 0; i < 8; i++) {
 			s = "|";
-			std::cout << "|";
 			if (map.find(i) != map.end()) {
 				std::vector<Piece*> pieces = map[i];
 				int j = 0;
@@ -43,26 +41,25 @@ public:
 						std::cout << this->repeat(numOfEmptyTiles, "   |");
 						s += this->repeat(numOfEmptyTiles, "   |");
 					}
-					std::cout << " " << this->PieceTypeToString(p->GetPieceType()) << " |";
-					s += " " + this->PieceTypeToString(p->GetPieceType());
+					s += " ";
+					s += this->PieceTypeToString(p->GetPieceType());
 					s += " |";
 					j = file;
 				}
 				if (j < 7) {
-					std::cout << this->repeat(7 - j, "   |");
+					s += this->repeat(7 - j, "   |");
 				}
-				std::cout << std::endl;
+				s += "\n";
 			}
 			else {
-				std::cout << this->repeat(8, "   |") << std::endl;
+				s += this->repeat(8, "   |");
+				s += "\n";
 			}
 			res += s;
 			res += "+---+---+---+---+---+---+---+---+\n";
-			std::cout << "+---+---+---+---+---+---+---+---+" << std::endl;
 		}
-
+		std::cout << s;
 		return res;
-
 	};
 
 private:
