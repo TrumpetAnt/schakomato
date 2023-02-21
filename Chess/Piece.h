@@ -11,6 +11,7 @@ public:
 	}
 	Square GetPosition() { return square; };
 	PieceType GetPieceType() { return type; };
+	int GetPlayer() { return player; }
 
 	inline bool operator==(const Piece& a) {
 		return this->square == a.square;

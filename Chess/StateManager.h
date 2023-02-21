@@ -2,6 +2,7 @@
 #include <vector>
 #include "Piece.h"
 #include "PieceTypes.h"
+#include <string>
 
 class StateManager
 {
@@ -48,5 +49,6 @@ public:
 	void Move(std::string notation);
 private:
 	std::vector<Piece*>* board;
+	int currentPlayer = 0;
 };
 

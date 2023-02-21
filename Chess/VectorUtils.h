@@ -1,12 +1,12 @@
 #pragma once
+#include <functional>
 
 template <typename T>
-T Find(std::Container<T>* container, bool(*evaluator)(T, T), T target) {
-
-	for (T element : container) {
+T* Find(std::vector<T*>* vector, std::function<bool(T*)> evaluator) {
+	for (T* element : *vector) {
 		if (evaluator(element)) {
 			return element;
 		}
 	}
-	return null;
+	return NULL;
 };
