@@ -137,8 +137,10 @@
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NotImplementedException.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="PieceTypes.h" />
+    <ClInclude Include="PieceUtils.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="StateManager.h" />

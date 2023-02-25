@@ -1,8 +1,11 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "Piece.h"
 #include "PieceTypes.h"
-#include <string>
+#include "PieceUtils.h"
+#include "NotImplementedException.h"
+#include "VectorUtils.h"
 
 class StateManager
 {
@@ -50,5 +53,9 @@ public:
 private:
 	std::vector<Piece*>* board;
 	int currentPlayer = 0;
+	
+	Piece* FindPieceFromMove(std::string notation);
+	Piece* FindPieceFromTarget(Square target, PieceType type);
+	Piece* FindPawnFromSourceSquare(Square target);
 };
 

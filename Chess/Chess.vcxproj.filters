@@ -47,5 +47,11 @@
     <ClInclude Include="VectorUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PieceUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NotImplementedException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
