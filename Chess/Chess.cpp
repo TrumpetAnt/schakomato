@@ -7,5 +7,7 @@ int main()
 	StateManager state;
 	Renderer renderer(state);
 	std::string s = renderer.StateToString();
-	//std::cout <<  << std::endl;
+	state.Move("e4");
+	renderer.StateToString();
+	//std::cout << s << std::endl;
 }

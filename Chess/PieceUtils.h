@@ -3,18 +3,21 @@
 #include <stdexcept>
 #include "Piece.h"
 
-std::function<bool(Piece*)> FindPieceAux(PieceType type, int player, Square square) {
+std::function<bool(Piece*)> inline FindPieceAux(PieceType type, int player, Square square) {
 	std::function<bool(Piece*)> ret = [type, player, square](Piece* piece) {
-		Square sq = piece->GetPosition();
+		Square* sq = piece->GetPosition();
+		auto file = sq->file;
+		auto rank = sq->rank;
+		delete sq;
 		return piece->GetPieceType() == type &&
-			sq.file == square.file &&
-			sq.rank == square.rank &&
+			file == square.file &&
+			rank == square.rank &&
 			piece->GetPlayer() == player;
 	};
 	return ret;
 }
 
-PieceType CharToPieceType(char c) {
+PieceType inline CharToPieceType(char c) {
 	switch (c) {
 	case 'B':
 		return Bishop;

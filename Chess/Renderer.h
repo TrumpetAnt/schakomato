@@ -20,11 +20,13 @@ public:
 
 		std::map<int, std::vector<Piece*>> map;
 		for (Piece* p : *this->state.GetBoard()) {
-			int rank = p->GetPosition().rank;
+			auto pos = p->GetPosition();
+			int rank = pos->rank;
 			if (map.find(rank) == map.end()) {
 				map[rank] = std::vector<Piece*>();
 			}
-			map[p->GetPosition().rank].push_back(p);
+			map[pos->rank].push_back(p);
+			delete pos;
 		}
 		std::string res;
 		std::string s;
@@ -35,7 +37,9 @@ public:
 				std::vector<Piece*> pieces = map[i];
 				int j = 0;
 				for (Piece* p : pieces) {
-					int file = this->FileToPosition(p->GetPosition().file);
+					auto pos = p->GetPosition();
+					int file = this->FileToPosition(pos->file);
+					delete pos;
 					int numOfEmptyTiles = file - j - 1;
 					if (numOfEmptyTiles > 0) {
 						std::cout << this->repeat(numOfEmptyTiles, "   |");
@@ -58,7 +62,7 @@ public:
 			res += s;
 			res += "+---+---+---+---+---+---+---+---+\n";
 		}
-		std::cout << s;
+		std::cout << res;
 		return res;
 	};
 

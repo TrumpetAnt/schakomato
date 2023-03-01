@@ -1,26 +1,7 @@
 #include "pch.h"
 #include <string>
 #include <fstream>
-#include "../Chess/StateManager.h"
-#include "../Chess/VectorUtils.h"
-#include "../Chess/Piece.h"
-#include "../Chess/PieceUtils.h"
-
-typedef bool (*ptr)(Piece*);
-typedef ptr(*pm)();
-
-int summation(int a, int b) {
-	return a + b;
-}
-
-
-bool TestFunction(Piece* param) {
-	return true;
-}
-
-bool TestForInt(int* x) {
-	return true;
-}
+#include "StateManager.h"
 
 TEST(GameplayTest, PawnMovement_NoCapture) {
 	// Arrange
@@ -29,7 +10,6 @@ TEST(GameplayTest, PawnMovement_NoCapture) {
 	// Act
 	state.Move("e4");
 	state.Move("d5");
-
 
 	// Assert
 	std::vector<Piece*>* pieces = state.GetBoard();

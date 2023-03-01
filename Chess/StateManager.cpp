@@ -1,9 +1,5 @@
 #include "StateManager.h"
 
-void StateManager::Move(std::string notation)
-{
-	Piece* piece = FindPieceFromMove(notation);
-}
 
 PieceType GetPieceType(std::string notation) {
 	if (!isupper(notation[0])) {
@@ -27,7 +23,8 @@ Piece* StateManager::FindPieceFromTarget(Square target, PieceType type) {
 	}
 }
 
-Piece* StateManager::FindPieceFromMove(std::string notation) {
+void StateManager::Move(std::string notation)
+{
 	// TODO: Add regex input validation
 	// TODO: Captures 
 	// TODO: Implement Disambiguating moves
@@ -37,7 +34,8 @@ Piece* StateManager::FindPieceFromMove(std::string notation) {
 	// TODO: Check 
 	// TODO: Checkmate 
 	// TODO: End of game 
-	bool capture = notation.find('x');
+	auto x = notation.find('x');
+	bool capture = x != std::string::npos;
 	PieceType type = GetPieceType(notation);
 	if (type != Pawn) {
 		notation = notation.substr(1);
@@ -45,7 +43,7 @@ Piece* StateManager::FindPieceFromMove(std::string notation) {
 	if (capture) {
 		notation = notation.substr(1);
 	}
-	Square target = Square{ notation[0], notation[1] };
-
-	return FindPieceFromTarget(target, type);
+	Square target = Square{ notation[0], notation[1] - '0'};
+	Piece* piece = FindPieceFromTarget(target, type);
+	piece->Move(target.file, target.rank);
 }

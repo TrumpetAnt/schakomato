@@ -1,8 +1,7 @@
 #include "pch.h"
 #include <string>
 #include <fstream>
-#include "../Chess/StateManager.h"
-#include "../Chess/Renderer.h"
+#include "Renderer.h"
 
 TEST(RenderTest, InitialBoard) {
 	// Arrange
