@@ -7,8 +7,11 @@
 class Piece
 {
 public:
-	Piece(PieceType type, int player, char file, int rank) : type(type), player(player), square(std::make_unique<Square>(Square{ file, rank })) {};
+	Piece(PieceType type, int player, char file, int rank) : type(type), player(player) {
+		square = std::make_unique<Square>(Square{ file, rank });
+	};
 	void Move(char file, int rank) {
+		square.reset();
 		square = std::make_unique<Square>(Square{file, rank});
 	}
 	Square* GetPosition() { return new Square{square->file, square->rank}; };

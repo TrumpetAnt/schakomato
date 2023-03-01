@@ -9,9 +9,9 @@ PieceType GetPieceType(std::string notation) {
 }
 
 Piece* StateManager::FindPawnFromSourceSquare(Square target) {
-	int rankModifier = this->currentPlayer == 0 ? 1 : -1;
+	int rankModifier = this->currentPlayer == 0 ? -1 : 1;
 	Piece* x = Find(this->board, FindPieceAux(Pawn, this->currentPlayer, Square{ target.file, target.rank + rankModifier }));
-	return x != nullptr ? x : Find(this->board, FindPieceAux(Pawn, this->currentPlayer, Square{ target.file, target.rank + rankModifier * 2 }));
+	return x != nullptr ? x : Find(this->board, FindPieceAux(Pawn, this->currentPlayer, Square{ target.file, target.rank + rankModifier + rankModifier }));
 }
 
 Piece* StateManager::FindPieceFromTarget(Square target, PieceType type) {
@@ -43,7 +43,11 @@ void StateManager::Move(std::string notation)
 	if (capture) {
 		notation = notation.substr(1);
 	}
-	Square target = Square{ notation[0], notation[1] - '0'};
+	Square target = Square{ notation[0], (notation[1] - '0')};
 	Piece* piece = FindPieceFromTarget(target, type);
+	if (piece == nullptr) {
+		throw new std::invalid_argument("Unable to execute move");
+	}
 	piece->Move(target.file, target.rank);
+	currentPlayer = 1 - currentPlayer;
 }

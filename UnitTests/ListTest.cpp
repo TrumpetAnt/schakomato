@@ -54,6 +54,7 @@ TEST(ListTestInt, Get) {
 
 TEST(ListTestInt, RemoveEnd) {
 	std::unique_ptr<List<int>> list = std::make_unique<List<int>>(List<int>());
+	EXPECT_ANY_THROW(list->RemoveEnd());
 	list->Append(1);
 	list->Append(2);
 	list->Append(3);
@@ -65,6 +66,8 @@ TEST(ListTestInt, RemoveEnd) {
 	EXPECT_EQ(list->RemoveEnd(), 1);
 
 	EXPECT_EQ(list->Count(), 0);
+
+	EXPECT_ANY_THROW(list->RemoveEnd());
 }
 
 TEST(ListTestInt, MultipleActions) {
@@ -174,6 +177,7 @@ TEST(ListTestSquare, Get) {
 
 TEST(ListTestSquare, RemoveEnd) {
 	std::unique_ptr<List<Square*>> list = std::make_unique<List<Square*>>(List<Square*>());
+	EXPECT_ANY_THROW(list->RemoveEnd());
 	list->Append(new Square{ 'A', 0 });
 	list->Append(new Square{ 'B', 1 });
 	list->Append(new Square{ 'C', 2 });
@@ -191,4 +195,5 @@ TEST(ListTestSquare, RemoveEnd) {
 	EXPECT_EQ(x, y);
 
 	EXPECT_EQ(list->Count(), 0);
+	EXPECT_ANY_THROW(list->RemoveEnd());
 }
