@@ -132,14 +132,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chess.cpp" />
-    <ClCompile Include="List.cpp" />
-    <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="List.h" />
-    <ClInclude Include="ListNode.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="NotImplementedException.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="PieceTypes.h" />
@@ -147,7 +144,6 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="StateManager.h" />
-    <ClInclude Include="VectorUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

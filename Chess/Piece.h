@@ -2,30 +2,18 @@
 #include <memory>
 #include "PieceTypes.h"
 #include "Square.h"
+#include "Color.h"
 
 
 class Piece
 {
 public:
-	Piece(PieceType type, int player, char file, int rank) : type(type), player(player) {
-		square = std::make_unique<Square>(Square{ file, rank });
-	};
-	void Move(char file, int rank) {
-		square.reset();
-		square = std::make_unique<Square>(Square{file, rank});
-	}
-	Square* GetPosition() { return new Square{square->file, square->rank}; };
+	Piece(PieceType type, Color player) : type(type), player(player) {};
 	PieceType GetPieceType() { return type; };
-	int GetPlayer() { return player; }
+	Color GetPlayer() { return player; }
+	Piece* Copy() { return new Piece(type, player); };
 
-	inline bool operator==(const Piece& a) {
-		return this->square == a.square;
-	}
-	bool operator()(const Piece& a, const Piece& b) const {
-		return a.square->file < b.square->file;
-	}
 private:
 	PieceType type;
-	int player;
-	std::unique_ptr<Square> square;
+	Color player;
 };

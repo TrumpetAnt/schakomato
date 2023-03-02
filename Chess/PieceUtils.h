@@ -3,21 +3,11 @@
 #include <stdexcept>
 #include "Piece.h"
 
-std::function<bool(Piece*)> inline FindPieceAux(PieceType type, int player, Square square) {
-	std::function<bool(Piece*)> ret = [type, player, square](Piece* piece) {
-		Square* sq = piece->GetPosition();
-		auto file = sq->file;
-		auto rank = sq->rank;
-		delete sq;
-		return piece->GetPieceType() == type &&
-			file == square.file &&
-			rank == square.rank &&
-			piece->GetPlayer() == player;
-	};
-	return ret;
+inline int SquareToInt(Square square) {
+	return (square.file - 'a') + (square.rank - 1) * 8;
 }
 
-PieceType inline CharToPieceType(char c) {
+inline PieceType CharToPieceType(char c) {
 	switch (c) {
 	case 'B':
 		return Bishop;
@@ -31,4 +21,23 @@ PieceType inline CharToPieceType(char c) {
 		return Knight;
 	}
 	throw new std::invalid_argument("Character not a piecetype");
+}
+
+inline char PieceTypeToChar(PieceType type) {
+	switch (type) {
+	case King:
+		return 'K';
+	case Queen:
+		return 'Q';
+	case Rook:
+		return 'R';
+	case Bishop:
+		return 'B';
+	case Knight:
+		return 'N';
+	case Pawn:
+		return 'i';
+	default:
+		throw std::invalid_argument("Unhandeled switch case");
+	}
 }

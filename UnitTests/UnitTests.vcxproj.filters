@@ -5,7 +5,6 @@
     <ClCompile Include="test.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="MovementTests.cpp" />
-    <ClCompile Include="ListTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

@@ -5,11 +5,11 @@
 
 TEST(RenderTest, InitialBoard) {
 	// Arrange
-	StateManager& state = StateManager();
-	Renderer& renderer = Renderer(state);
+	auto state = std::make_shared<StateManager>(StateManager());
+	auto renderer = std::make_unique<Renderer>(Renderer(state));
 
 	// Act
-	std::string output = renderer.StateToString();
+	std::string output = renderer->StateToString();
 
 	//Assert
 	std::string s = "+---+---+---+---+---+---+---+---+\n\

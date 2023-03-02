@@ -4,10 +4,9 @@
 
 int main()
 {
-	StateManager state;
-	Renderer renderer(state);
-	std::string s = renderer.StateToString();
-	state.Move("e4");
-	renderer.StateToString();
-	//std::cout << s << std::endl;
+	auto state = std::make_shared<StateManager>();
+	auto renderer = std::make_unique<Renderer>(Renderer(state));
+	renderer->PrintStateToConsole();
+	state->Move("e4");
+	renderer->PrintStateToConsole();
 }

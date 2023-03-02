@@ -40,7 +40,6 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ListTest.cpp" />
     <ClCompile Include="MovementTests.cpp" />
     <ClCompile Include="RendererTests.cpp" />
     <ClCompile Include="test.cpp" />
@@ -91,7 +90,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>StateManager.obj;List.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>StateManager.obj;Renderer.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Source\Chess\Chess\x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

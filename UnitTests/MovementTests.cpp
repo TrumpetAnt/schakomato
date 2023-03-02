@@ -12,21 +12,22 @@ TEST(GameplayTest, PawnMovement_NoCapture) {
 	state->Move("d5");
 
 	// Assert
-	std::vector<Piece*>* pieces = state->GetBoard();
+	auto board = state->GetStateCopy();
 	Piece* result;
 
-	result = Find(pieces, FindPieceAux(Pawn, 0, Square{ 'e', 4 }));
+	result = board[SquareToInt(Square{ 'e', 4 })];
 	EXPECT_NE(nullptr, result);
 
-	result = Find(pieces, FindPieceAux(Pawn, 1, Square{ 'd', 5 }));
+	result = board[SquareToInt(Square{ 'd', 5 })];
 	EXPECT_NE(nullptr, result);
 
-	result = Find(pieces, FindPieceAux(Pawn, 0, Square{ 'e', 2 }));
+	result = board[SquareToInt(Square{ 'e', 2 })];
 	EXPECT_EQ(nullptr, result);
 
-	result = Find(pieces, FindPieceAux(Pawn, 1, Square{ 'd', 7 }));
+	result = board[SquareToInt(Square{ 'd', 7 })];
 	EXPECT_EQ(nullptr, result);
 }
+
 TEST(GameplayTest, PawnMovement_NoCapture_MultipleMoves) {
 	// Arrange
 	StateManager* state = new StateManager();
@@ -41,30 +42,30 @@ TEST(GameplayTest, PawnMovement_NoCapture_MultipleMoves) {
 	state->Move("d3");
 
 	// Assert
-	std::vector<Piece*>* pieces = state->GetBoard();
+	auto board = state->GetStateCopy();
 	Piece* result;
 
-	result = Find(pieces, FindPieceAux(Pawn, 0, Square{ 'e', 6 }));
+	result = board[SquareToInt(Square{ 'e', 6 })];
 	EXPECT_NE(nullptr, result);
 
-	result = Find(pieces, FindPieceAux(Pawn, 1, Square{ 'd', 3 }));
+	result = board[SquareToInt(Square{ 'd', 3 })];
 	EXPECT_NE(nullptr, result);
 
-	result = Find(pieces, FindPieceAux(Pawn, 0, Square{ 'e', 2 }));
+	result = board[SquareToInt(Square{ 'e', 2 })];
 	EXPECT_EQ(nullptr, result);
-	result = Find(pieces, FindPieceAux(Pawn, 0, Square{ 'e', 3 }));
+	result = board[SquareToInt(Square{ 'e', 3 })];
 	EXPECT_EQ(nullptr, result);
-	result = Find(pieces, FindPieceAux(Pawn, 0, Square{ 'e', 4 }));
+	result = board[SquareToInt(Square{ 'e', 4 })];
 	EXPECT_EQ(nullptr, result);
-	result = Find(pieces, FindPieceAux(Pawn, 0, Square{ 'e', 5 }));
+	result = board[SquareToInt(Square{ 'e', 5 })];
 	EXPECT_EQ(nullptr, result);
 
-	result = Find(pieces, FindPieceAux(Pawn, 1, Square{ 'd', 7 }));
+	result = board[SquareToInt(Square{ 'd', 7 })];
 	EXPECT_EQ(nullptr, result);
-	result = Find(pieces, FindPieceAux(Pawn, 1, Square{ 'd', 6 }));
+	result = board[SquareToInt(Square{ 'd', 6 })];
 	EXPECT_EQ(nullptr, result);
-	result = Find(pieces, FindPieceAux(Pawn, 1, Square{ 'd', 5 }));
+	result = board[SquareToInt(Square{ 'd', 5 })];
 	EXPECT_EQ(nullptr, result);
-	result = Find(pieces, FindPieceAux(Pawn, 1, Square{ 'd', 4 }));
+	result = board[SquareToInt(Square{ 'd', 4 })];
 	EXPECT_EQ(nullptr, result);
 }
