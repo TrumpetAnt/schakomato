@@ -23,7 +23,7 @@ std::string Renderer::StateToString() {
 	for (size_t i = 0; i < 8; i++) {
 		res += "|";
 		for (size_t j = 0; j < 8; j++) {
-			char piece = board[i * 8 + j] != nullptr ? PieceTypeToChar(board[i * 8 + j]->GetPieceType()) : ' ';
+			char piece = board[(7 - i) * 8 + j] != nullptr ? PieceTypeToChar(board[(7 - i) * 8 + j]->GetPieceType()) : ' ';
 			res += " ";
 			res += piece;
 			res += " |";

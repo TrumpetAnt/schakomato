@@ -42,7 +42,18 @@ StateManager::StateManager() {
 	board[SquareToInt(Square{ 'f',7 })] = new Piece(Pawn, Black);
 	board[SquareToInt(Square{ 'g',7 })] = new Piece(Pawn, Black);
 	board[SquareToInt(Square{ 'h',7 })] = new Piece(Pawn, Black);
+}
 
+StateManager::StateManager(std::string boardString) {
+	board = std::make_unique<Piece* []>(64);
+	auto pieceString = boardString.substr(0, 4);
+	while (pieceString.length() == 4) {
+		board[SquareToInt(Square{ pieceString[2], pieceString[3] - '0'})] =
+			new Piece(GetPieceType(pieceString.substr(1, 1)), pieceString[0] == 0 ? White : Black);
+
+		boardString = boardString.substr(4);
+		pieceString = boardString.substr(0, 4);
+	}
 }
 
 std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
@@ -56,11 +67,15 @@ std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
 }
 
 int StateManager::FindPawnFromSourceSquare(Square target) {
-	int rankModifier = this->currentPlayer == White ? -1 : 1;
-	if (board[SquareToInt(Square{ target.file, target.rank + rankModifier })] != nullptr) {
+	int rankModifier = currentPlayer == White ? -1 : 1;
+	auto pieceAtTarget = board[SquareToInt(Square{ target.file, target.rank + rankModifier })];
+	if (pieceAtTarget != nullptr && pieceAtTarget->GetPlayer() == currentPlayer) {
 		return SquareToInt(Square{ target.file, target.rank + rankModifier });
 	}
-	if (board[SquareToInt(Square{ target.file, target.rank + rankModifier * 2})] != nullptr) {
+	auto secondPiece = board[SquareToInt(Square{ target.file, target.rank + rankModifier * 2 })];
+	if (target.rank == (currentPlayer == White ? 4 : 5) &&
+		secondPiece != nullptr &&
+		pieceAtTarget == nullptr) {
 		return SquareToInt(Square{ target.file, target.rank + rankModifier * 2});
 	}
 	return -1;
@@ -72,6 +87,18 @@ int StateManager::FindPieceFromTarget(Square target, PieceType type) {
 		return FindPawnFromSourceSquare(target);
 	default:
 		throw new NotImplementedException();
+	}
+}
+
+void StateManager::ValidateMoveToTarget(Square target, bool capture) {
+	auto pieceAtTarget = board[SquareToInt(target)];
+	if (pieceAtTarget != nullptr) {
+		if (pieceAtTarget->GetPlayer() != currentPlayer && !capture) {
+			throw std::invalid_argument("A capturing move is required to capture a piece.");
+		}
+		if (pieceAtTarget->GetPlayer() == this->currentPlayer) {
+			throw std::invalid_argument("Square is occupied by same player piece");
+		}
 	}
 }
 
@@ -96,6 +123,9 @@ void StateManager::Move(std::string notation)
 		notation = notation.substr(1);
 	}
 	Square target = Square{ notation[0], (notation[1] - '0') };
+	
+	ValidateMoveToTarget(target, capture);
+
 	int piecePosition = FindPieceFromTarget(target, type);
 	if (piecePosition == -1) {
 		throw new std::invalid_argument("Unable to execute move");

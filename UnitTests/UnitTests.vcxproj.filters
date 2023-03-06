@@ -22,5 +22,8 @@
     <Text Include="InitialBoard.txt">
       <Filter>Testdata</Filter>
     </Text>
+    <Text Include="PawnMovementTest.txt">
+      <Filter>Testdata</Filter>
+    </Text>
   </ItemGroup>
 </Project>

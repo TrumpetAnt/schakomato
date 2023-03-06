@@ -10,6 +10,7 @@ class StateManager
 {
 public:
 	StateManager();
+	StateManager(std::string boardString);
 	void Move(std::string notation);
 	std::unique_ptr<Piece* []> GetStateCopy();
 private:
@@ -18,5 +19,6 @@ private:
 
 	int FindPieceFromTarget(Square target, PieceType type);
 	int FindPawnFromSourceSquare(Square target);
+	void ValidateMoveToTarget(Square target, bool capture);
 };
 
