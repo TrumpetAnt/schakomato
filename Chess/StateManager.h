@@ -17,8 +17,8 @@ private:
 	std::unique_ptr<Piece*[]> board;
 	int currentPlayer = 0;
 
-	int FindPieceFromTarget(Square target, PieceType type);
-	int FindPawnFromSourceSquare(Square target);
+	int FindPieceFromTarget(Square target, PieceType type, bool capture);
+	int FindPawnFromSourceSquare(Square target, bool capture);
 	void ValidateMoveToTarget(Square target, bool capture);
 };
 

@@ -162,3 +162,102 @@ TEST(PawnMovement, NoCapture_MultipleMoves) {
 	result = board[SquareToInt(Square{ 'd', 4 })];
 	EXPECT_EQ(nullptr, result);
 }
+
+TEST(PawnCapturing, Capture_SingleMove) {
+	auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+	EXPECT_NE(0, str.length());
+	// Arrange
+	StateManager* state = new StateManager(str);
+
+	// Act
+	state->Move("xb3");
+
+	// Assert
+	auto board = state->GetStateCopy();
+	Piece* result;
+
+	AssertSquareNotNull(Square{ 'b', 3 }, &board);
+	AssertSquareNull(Square{ 'a', 2 }, &board);
+
+	EXPECT_EQ(White, board[SquareToInt(Square{ 'b', 3 })]->GetPlayer());
+}
+
+TEST(PawnCapturing, Capture_SingleMove_SecondOption) {
+	auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+	EXPECT_NE(0, str.length());
+	// Arrange
+	StateManager* state = new StateManager(str);
+
+	// Act
+	state->Move("xc3");
+
+	// Assert
+	auto board = state->GetStateCopy();
+	Piece* result;
+
+	AssertSquareNotNull(Square{ 'c', 3 }, &board);
+	AssertSquareNull(Square{ 'd', 2 }, &board);
+
+	EXPECT_EQ(White, board[SquareToInt(Square{ 'c', 3 })]->GetPlayer());
+}
+
+TEST(PawnCapturing, Capture_MultipleCaptures) {
+	auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+	EXPECT_NE(0, str.length());
+	// Arrange
+	StateManager* state = new StateManager(str);
+
+	// Act
+	state->Move("xb3");
+	state->Move("xa6");
+	state->Move("xc3");
+	state->Move("xd4");
+
+	// Assert
+	auto board = state->GetStateCopy();
+	Piece* result;
+
+	AssertSquareNotNull(Square{ 'b', 3 }, &board);
+	AssertSquareNotNull(Square{ 'a', 6 }, &board);
+	AssertSquareNotNull(Square{ 'c', 3 }, &board);
+	AssertSquareNotNull(Square{ 'd', 4 }, &board);
+	AssertSquareNull(Square{ 'a', 2 }, &board);
+	AssertSquareNull(Square{ 'b', 7 }, &board);
+	AssertSquareNull(Square{ 'd',2 }, &board);
+	AssertSquareNull(Square{ 'c', 5 }, &board);
+
+	EXPECT_EQ(White, board[SquareToInt(Square{ 'b', 3 })]->GetPlayer());
+	EXPECT_EQ(Black, board[SquareToInt(Square{ 'a', 6 })]->GetPlayer());
+	EXPECT_EQ(White, board[SquareToInt(Square{ 'c', 3 })]->GetPlayer());
+	EXPECT_EQ(Black, board[SquareToInt(Square{ 'd', 4 })]->GetPlayer());
+}
+
+TEST(PawnCapturing, Capture_ThrowsException_NoTarget) {
+	auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+	EXPECT_NE(0, str.length());
+	// Arrange
+	StateManager* state = new StateManager(str);
+
+	// Act
+	EXPECT_ANY_THROW(state->Move("xe3"));
+}
+
+TEST(PawnCapturing, Capture_ThrowsException_NoSource) {
+	auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+	EXPECT_NE(0, str.length());
+	// Arrange
+	StateManager* state = new StateManager(str);
+
+	// Act
+	EXPECT_ANY_THROW(state->Move("xg5"));
+}
+
+TEST(PawnCapturing, Capture_ThrowsException_FriendlyPiece) {
+	auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+	EXPECT_NE(0, str.length());
+	// Arrange
+	StateManager* state = new StateManager(str);
+
+	// Act
+	EXPECT_ANY_THROW(state->Move("xd4"));
+}
