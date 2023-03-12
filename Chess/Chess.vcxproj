@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>

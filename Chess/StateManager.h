@@ -19,6 +19,9 @@ private:
 
 	int FindPieceFromTarget(Square target, PieceType type, bool capture);
 	int FindPawnFromSourceSquare(Square target, bool capture);
-	void ValidateMoveToTarget(Square target, bool capture);
+	int FindKnightFromSourceSquare(Square target);
+	void ValidateMoveToTarget(Square target, bool capture, bool enPassant);
+
+	int enPassantCapturablePawn = -1;
 };
 

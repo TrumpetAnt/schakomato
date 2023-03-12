@@ -7,6 +7,10 @@ inline int SquareToInt(Square square) {
 	return (square.file - 'a') + (square.rank - 1) * 8;
 }
 
+inline Square IntToSquare(int square) {
+	return Square{ (char)(square % 8 + 'a'), square / 8 + 1 };
+}
+
 inline PieceType CharToPieceType(char c) {
 	switch (c) {
 	case 'B':

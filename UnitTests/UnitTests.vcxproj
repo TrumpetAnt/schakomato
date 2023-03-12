@@ -36,11 +36,11 @@
     <IncludePath>C:\Source\Chess\Chess;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemGroup>
-    <ClInclude Include="MovementTests.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MovementTests.cpp" />
+    <ClCompile Include="KnightTests.cpp" />
+    <ClCompile Include="PawnTests.cpp" />
     <ClCompile Include="RendererTests.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="pch.cpp">
@@ -55,7 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="PawnCapturingTest.txt" />
+    <Text Include="PawnEnPassantTest.txt" />
     <Text Include="PawnMovementTest.txt" />
+    <Text Include="PawnUpgradeTest.txt" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -91,7 +93,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>StateManager.obj;Renderer.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>StateManager.obj;Renderer.obj;Piece.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Source\Chess\Chess\x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

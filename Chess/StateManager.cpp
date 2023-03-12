@@ -8,7 +8,7 @@ PieceType GetPieceType(std::string notation) {
 }
 
 StateManager::StateManager() {
-	board = std::make_unique<Piece*[]>(64);
+	board = std::make_unique<Piece* []>(64);
 	board[SquareToInt(Square{ 'a',1 })] = new Piece(Rook, White);
 	board[SquareToInt(Square{ 'b',1 })] = new Piece(Knight, White);
 	board[SquareToInt(Square{ 'c',1 })] = new Piece(Bishop, White);
@@ -48,7 +48,7 @@ StateManager::StateManager(std::string boardString) {
 	board = std::make_unique<Piece* []>(64);
 	auto pieceString = boardString.substr(0, 4);
 	while (pieceString.length() == 4) {
-		board[SquareToInt(Square{ pieceString[2], pieceString[3] - '0'})] =
+		board[SquareToInt(Square{ pieceString[2], pieceString[3] - '0' })] =
 			new Piece(GetPieceType(pieceString.substr(1, 1)), pieceString[0] - '0' == 0 ? White : Black);
 
 		boardString = boardString.substr(4);
@@ -83,7 +83,7 @@ int StateManager::FindPawnFromSourceSquare(Square target, bool capture) {
 	else {
 		auto capturingPieceA = board[SquareToInt(Square{ (char)(target.file - 1), target.rank + rankModifier })];
 		auto capturingPieceB = board[SquareToInt(Square{ (char)(target.file + 1), target.rank + rankModifier })];
-		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer && 
+		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer &&
 			capturingPieceB != nullptr && capturingPieceB->GetPlayer() == currentPlayer) {
 			throw new NotImplementedException();
 		}
@@ -94,20 +94,36 @@ int StateManager::FindPawnFromSourceSquare(Square target, bool capture) {
 			return SquareToInt(Square{ (char)(target.file + 1), target.rank + rankModifier });
 		}
 	}
-	
+
 	return -1;
+}
+
+int StateManager::FindKnightFromSourceSquare(Square target) {
+
+	int sourceSquares[8] = {
+		SquareToInt(Square{(char)((int)target.file + 1), target.rank + 2}),
+		SquareToInt(Square{(char)((int)target.file + 2), target.rank + 1}),
+		SquareToInt(Square{(char)((int)target.file - 1), target.rank + 2}),
+		SquareToInt(Square{(char)((int)target.file - 2), target.rank + 1}),
+		SquareToInt(Square{(char)((int)target.file + 1), target.rank - 2}),
+		SquareToInt(Square{(char)((int)target.file + 2), target.rank - 1}),
+		SquareToInt(Square{(char)((int)target.file - 1), target.rank - 2}),
+		SquareToInt(Square{(char)((int)target.file - 2), target.rank - 1})
+	};
 }
 
 int StateManager::FindPieceFromTarget(Square target, PieceType type, bool capture) {
 	switch (type) {
 	case Pawn:
 		return FindPawnFromSourceSquare(target, capture);
+	case Knight:
+		return FindKnightFromSourceSquare(target);
 	default:
 		throw new NotImplementedException();
 	}
 }
 
-void StateManager::ValidateMoveToTarget(Square target, bool capture) {
+void StateManager::ValidateMoveToTarget(Square target, bool capture, bool enPassant) {
 	auto pieceAtTarget = board[SquareToInt(target)];
 	if (pieceAtTarget != nullptr) {
 		if (pieceAtTarget->GetPlayer() != currentPlayer && !capture) {
@@ -117,6 +133,12 @@ void StateManager::ValidateMoveToTarget(Square target, bool capture) {
 			throw std::invalid_argument("Square is occupied by same player piece");
 		}
 	}
+	else if (capture && !enPassant) {
+		throw std::invalid_argument("No piece at target of capturing move");
+	}
+	else if (enPassant && enPassantCapturablePawn == -1) {
+		throw std::invalid_argument("No legal en passant move.");
+	}
 }
 
 void StateManager::Move(std::string notation)
@@ -124,14 +146,13 @@ void StateManager::Move(std::string notation)
 	// TODO: Add regex input validation
 	// TODO: Captures 
 	// TODO: Implement Disambiguating moves
-	// TODO: Pawn promotion
 	// TODO: Draw offer
 	// TODO: Castling 
 	// TODO: Check 
 	// TODO: Checkmate 
 	// TODO: End of game 
-	auto x = notation.find('x');
-	bool capture = x != std::string::npos;
+	bool capture = notation.find('x') != std::string::npos;
+	bool enPassant = notation.length() > 4 && notation.compare(notation.length() - 4, 4, "e.p.") == 0;
 	PieceType type = GetPieceType(notation);
 	if (type != Pawn) {
 		notation = notation.substr(1);
@@ -140,14 +161,32 @@ void StateManager::Move(std::string notation)
 		notation = notation.substr(1);
 	}
 	Square target = Square{ notation[0], (notation[1] - '0') };
-	
-	ValidateMoveToTarget(target, capture);
+
+	ValidateMoveToTarget(target, capture, enPassant);
 
 	int piecePosition = FindPieceFromTarget(target, type, capture);
 	if (piecePosition == -1) {
 		throw new std::invalid_argument("Unable to execute move");
 	}
+	if (type == Pawn && target.rank == 8) {
+		if (notation.length() < 3) {
+			throw new std::invalid_argument("Pawn promotion expected, input too short");
+		}
+		board[piecePosition]->PromoteTo(CharToPieceType(notation[2]));
+	}
+	int enPassantTarget = enPassantCapturablePawn;
+	enPassantCapturablePawn = board[piecePosition]->GetPieceType() == Pawn && abs(IntToSquare(piecePosition).rank - target.rank) == 2
+		? SquareToInt(target)
+		: -1;
+
+	if (capture && !enPassant) {
+		delete board[SquareToInt(target)];
+	}
 	board[SquareToInt(target)] = board[piecePosition];
 	board[piecePosition] = nullptr;
+	if (enPassant) {
+		delete board[enPassantTarget];
+		board[enPassantTarget] = nullptr;
+	}
 	currentPlayer = 1 - currentPlayer;
 }
