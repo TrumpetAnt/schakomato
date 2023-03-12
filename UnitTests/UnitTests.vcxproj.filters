@@ -31,5 +31,8 @@
     <Text Include="PawnEnPassantTest.txt">
       <Filter>Testdata</Filter>
     </Text>
+    <Text Include="KnightMovementTest.txt">
+      <Filter>Testdata</Filter>
+    </Text>
   </ItemGroup>
 </Project>

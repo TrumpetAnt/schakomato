@@ -1,10 +1,11 @@
 #include "StateManager.h"
 
-PieceType GetPieceType(std::string notation) {
-	if (!isupper(notation[0])) {
+PieceType GetPieceType(std::string notation, bool capture) {
+	int i = capture ? 1 : 0;
+	if (!isupper(notation[i])) {
 		return Pawn;
 	}
-	return CharToPieceType(notation[0]);
+	return CharToPieceType(notation[i]);
 }
 
 StateManager::StateManager() {
@@ -49,7 +50,7 @@ StateManager::StateManager(std::string boardString) {
 	auto pieceString = boardString.substr(0, 4);
 	while (pieceString.length() == 4) {
 		board[SquareToInt(Square{ pieceString[2], pieceString[3] - '0' })] =
-			new Piece(GetPieceType(pieceString.substr(1, 1)), pieceString[0] - '0' == 0 ? White : Black);
+			new Piece(GetPieceType(pieceString.substr(1, 1), false), pieceString[0] - '0' == 0 ? White : Black);
 
 		boardString = boardString.substr(4);
 		pieceString = boardString.substr(0, 4);
@@ -99,17 +100,39 @@ int StateManager::FindPawnFromSourceSquare(Square target, bool capture) {
 }
 
 int StateManager::FindKnightFromSourceSquare(Square target) {
-
-	int sourceSquares[8] = {
-		SquareToInt(Square{(char)((int)target.file + 1), target.rank + 2}),
-		SquareToInt(Square{(char)((int)target.file + 2), target.rank + 1}),
-		SquareToInt(Square{(char)((int)target.file - 1), target.rank + 2}),
-		SquareToInt(Square{(char)((int)target.file - 2), target.rank + 1}),
-		SquareToInt(Square{(char)((int)target.file + 1), target.rank - 2}),
-		SquareToInt(Square{(char)((int)target.file + 2), target.rank - 1}),
-		SquareToInt(Square{(char)((int)target.file - 1), target.rank - 2}),
-		SquareToInt(Square{(char)((int)target.file - 2), target.rank - 1})
+	int targetInt = SquareToInt(target);
+	Square sourceSquares[8] = {
+		Square{(char)((int)target.file + 1), target.rank + 2},
+		Square{(char)((int)target.file + 2), target.rank + 1},
+		Square{(char)((int)target.file - 1), target.rank + 2},
+		Square{(char)((int)target.file - 2), target.rank + 1},
+		Square{(char)((int)target.file + 1), target.rank - 2},
+		Square{(char)((int)target.file + 2), target.rank - 1},
+		Square{(char)((int)target.file - 1), target.rank - 2},
+		Square{(char)((int)target.file - 2), target.rank - 1},
 	};
+	int sourceSquare = -1;
+	for (int i = 0; i < 8; i++) {
+		Square* sq = &sourceSquares[i];
+		if ((sq->file - 'a') < 0 ||
+			(sq->file - 'a') > 7 ||
+			sq->rank < 1 ||
+			sq->rank > 8) {
+			continue;
+		} 
+		int squareInt = SquareToInt(sourceSquares[i]);
+		Piece* p = board[squareInt];
+		if (p == nullptr ||
+			p->GetPieceType() != Knight ||
+			p->GetPlayer() != currentPlayer) {
+			continue;
+		}
+		if (sourceSquare != -1) {
+			throw std::invalid_argument("Unexpected ambiguous move");
+		}
+		sourceSquare = squareInt;
+	}
+	return sourceSquare;
 }
 
 int StateManager::FindPieceFromTarget(Square target, PieceType type, bool capture) {
@@ -143,8 +166,8 @@ void StateManager::ValidateMoveToTarget(Square target, bool capture, bool enPass
 
 void StateManager::Move(std::string notation)
 {
+	disambiguationSource = Square{ 'x', -1 };
 	// TODO: Add regex input validation
-	// TODO: Captures 
 	// TODO: Implement Disambiguating moves
 	// TODO: Draw offer
 	// TODO: Castling 
@@ -153,13 +176,24 @@ void StateManager::Move(std::string notation)
 	// TODO: End of game 
 	bool capture = notation.find('x') != std::string::npos;
 	bool enPassant = notation.length() > 4 && notation.compare(notation.length() - 4, 4, "e.p.") == 0;
-	PieceType type = GetPieceType(notation);
+	PieceType type = GetPieceType(notation, capture);
 	if (type != Pawn) {
 		notation = notation.substr(1);
 	}
 	if (capture) {
 		notation = notation.substr(1);
 	}
+	if (isalpha(notation[0]) && isalpha(notation[1])) {
+		disambiguationSource.file = notation[0];
+		notation = notation.substr(1);
+	}
+	if (notation.length() > 2 && isdigit(notation[1]) && isdigit(notation[2])) {
+		disambiguationSource.rank = notation[1];
+		char c = notation[0];
+		notation = notation.substr(1);
+		notation[0] = c;
+	}
+
 	Square target = Square{ notation[0], (notation[1] - '0') };
 
 	ValidateMoveToTarget(target, capture, enPassant);

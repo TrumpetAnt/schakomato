@@ -23,5 +23,6 @@ private:
 	void ValidateMoveToTarget(Square target, bool capture, bool enPassant);
 
 	int enPassantCapturablePawn = -1;
+	Square disambiguationSource;
 };
 
