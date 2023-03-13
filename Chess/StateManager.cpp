@@ -82,6 +82,13 @@ int StateManager::FindPawnFromSourceSquare(Square target, bool capture) {
 		}
 	}
 	else {
+		if (disambiguationSource.file != '\0') {
+			disambiguationSource.rank = target.rank + rankModifier;
+			auto capturingPiece = board[SquareToInt(disambiguationSource)];
+			if (capturingPiece != nullptr && capturingPiece->GetPlayer() == currentPlayer) {
+				return SquareToInt(disambiguationSource);
+			}
+		}
 		auto capturingPieceA = board[SquareToInt(Square{ (char)(target.file - 1), target.rank + rankModifier })];
 		auto capturingPieceB = board[SquareToInt(Square{ (char)(target.file + 1), target.rank + rankModifier })];
 		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer &&
@@ -112,8 +119,13 @@ int StateManager::FindKnightFromSourceSquare(Square target) {
 		Square{(char)((int)target.file - 2), target.rank - 1},
 	};
 	int sourceSquare = -1;
+	
 	for (int i = 0; i < 8; i++) {
 		Square* sq = &sourceSquares[i];
+		if ((disambiguationSource.file != '\0' && sq->file != disambiguationSource.file) ||
+			(disambiguationSource.rank != -1 && sq->rank != disambiguationSource.rank)) {
+			continue;
+		}
 		if ((sq->file - 'a') < 0 ||
 			(sq->file - 'a') > 7 ||
 			sq->rank < 1 ||
@@ -166,7 +178,7 @@ void StateManager::ValidateMoveToTarget(Square target, bool capture, bool enPass
 
 void StateManager::Move(std::string notation)
 {
-	disambiguationSource = Square{ 'x', -1 };
+	disambiguationSource = Square{ '\0', -1 };
 	// TODO: Add regex input validation
 	// TODO: Implement Disambiguating moves
 	// TODO: Draw offer

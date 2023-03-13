@@ -131,12 +131,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bishop.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="NotImplementedException.h" />
     <ClInclude Include="Piece.h" />

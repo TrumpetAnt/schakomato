@@ -39,6 +39,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BishopTests.cpp" />
     <ClCompile Include="KnightTests.cpp" />
     <ClCompile Include="PawnTests.cpp" />
     <ClCompile Include="RendererTests.cpp" />
@@ -54,6 +55,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="BishopCaptureTest.txt" />
+    <Text Include="BishopMovementTest.txt" />
     <Text Include="KnightMovementTest.txt" />
     <Text Include="PawnCapturingTest.txt" />
     <Text Include="PawnEnPassantTest.txt" />

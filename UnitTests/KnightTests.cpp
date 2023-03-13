@@ -118,4 +118,12 @@ namespace KnightTests {
 		EXPECT_EQ(nullptr, result);
 	}
 
+	TEST(KnightCapture, CaptureDisambiguation_MissingSource_ThrowsException) {
+		// Arrange
+		auto str = slurp("C:\\Source\\Chess\\UnitTests\\KnightMovementTest.txt");
+		StateManager* state = new StateManager(str);
+
+		// Act
+		EXPECT_ANY_THROW(state->Move("xNec3"));
+	}
 }

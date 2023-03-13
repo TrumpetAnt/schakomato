@@ -234,6 +234,26 @@ namespace PawnTests {
 		EXPECT_EQ(Black, board[SquareToInt(Square{ 'd', 4 })]->GetPlayer());
 	}
 
+	TEST(PawnCapturing, Capture_SingleMove_Disambiguation_WithPromotion) {
+		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+		EXPECT_NE(0, str.length());
+		// Arrange
+		StateManager* state = new StateManager(str);
+		
+		// Act
+		state->Move("xgf8Q");
+
+		// Assert
+		auto board = state->GetStateCopy();
+		Piece* result;
+
+		AssertSquareNotNull(Square{ 'f', 8 }, &board);
+		AssertSquareNull(Square{ 'g', 7 }, &board);
+
+		EXPECT_EQ(White, board[SquareToInt(Square{ 'f', 8 })]->GetPlayer());
+		EXPECT_EQ(Queen, board[SquareToInt(Square{ 'f', 8 })]->GetPieceType());
+	}
+
 	TEST(PawnCapturing, Capture_ThrowsException_NoTarget) {
 		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
 		EXPECT_NE(0, str.length());
