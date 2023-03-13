@@ -71,7 +71,7 @@ namespace BishopTests {
 
 		result = board[SquareToInt(Square{ 'a', 8 })];
 		EXPECT_NE(nullptr, result);
-		EXPECT_EQ(Bishop, result->GetPieceType());
+		EXPECT_EQ(BishopPiece, result->GetPieceType());
 		EXPECT_EQ(White, result->GetPlayer());
 
 		result = board[SquareToInt(Square{ 'h', 1 })];

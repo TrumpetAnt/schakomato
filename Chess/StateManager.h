@@ -5,6 +5,13 @@
 #include "PieceTypes.h"
 #include "PieceUtils.h"
 #include "NotImplementedException.h"
+#include "MoveCommand.h"
+#include "Pawn.h"
+#include "Bishop.h"
+#include "Knight.h"
+#include "Rook.h"
+#include "Queen.h"
+#include "King.h"
 
 class StateManager
 {
@@ -17,10 +24,13 @@ private:
 	std::unique_ptr<Piece*[]> board;
 	int currentPlayer = 0;
 
-	int FindPieceFromTarget(Square target, PieceType type, bool capture);
+	int FindPieceFromTarget(MoveCommand command);
 	int FindPawnFromSourceSquare(Square target, bool capture);
 	int FindKnightFromSourceSquare(Square target);
-	void ValidateMoveToTarget(Square target, bool capture, bool enPassant);
+	int FindBishopFromSourceSquare(Square target);
+	void BaseMoveValidation(MoveCommand command);
+
+	MoveCommand MoveFromInput(std::string notation);
 
 	int enPassantCapturablePawn = -1;
 	Square disambiguationSource;

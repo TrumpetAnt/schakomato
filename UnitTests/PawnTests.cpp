@@ -58,7 +58,6 @@ namespace PawnTests {
 
 		// Assert
 		auto board = state->GetStateCopy();
-		Piece* result;
 
 		AssertSquareNotNull(Square{ 'e', 3 }, &board);
 		AssertSquareNull(Square{ 'e', 2 }, &board);
@@ -176,7 +175,6 @@ namespace PawnTests {
 
 		// Assert
 		auto board = state->GetStateCopy();
-		Piece* result;
 
 		AssertSquareNotNull(Square{ 'b', 3 }, &board);
 		AssertSquareNull(Square{ 'a', 2 }, &board);
@@ -195,7 +193,6 @@ namespace PawnTests {
 
 		// Assert
 		auto board = state->GetStateCopy();
-		Piece* result;
 
 		AssertSquareNotNull(Square{ 'c', 3 }, &board);
 		AssertSquareNull(Square{ 'd', 2 }, &board);
@@ -217,7 +214,6 @@ namespace PawnTests {
 
 		// Assert
 		auto board = state->GetStateCopy();
-		Piece* result;
 
 		AssertSquareNotNull(Square{ 'b', 3 }, &board);
 		AssertSquareNotNull(Square{ 'a', 6 }, &board);
@@ -245,13 +241,12 @@ namespace PawnTests {
 
 		// Assert
 		auto board = state->GetStateCopy();
-		Piece* result;
 
 		AssertSquareNotNull(Square{ 'f', 8 }, &board);
 		AssertSquareNull(Square{ 'g', 7 }, &board);
 
 		EXPECT_EQ(White, board[SquareToInt(Square{ 'f', 8 })]->GetPlayer());
-		EXPECT_EQ(Queen, board[SquareToInt(Square{ 'f', 8 })]->GetPieceType());
+		EXPECT_EQ(QueenPiece, board[SquareToInt(Square{ 'f', 8 })]->GetPieceType());
 	}
 
 	TEST(PawnCapturing, Capture_ThrowsException_NoTarget) {
@@ -296,7 +291,6 @@ namespace PawnTests {
 
 		// Assert
 		auto board = state->GetStateCopy();
-		Piece* result;
 
 		AssertSquareNotNull(Square{ 'b', 3 }, &board);
 		AssertSquareNull(Square{ 'b', 4 }, &board);
@@ -333,7 +327,7 @@ namespace PawnTests {
 		//Assert
 		auto board = state->GetStateCopy();
 
-		EXPECT_EQ(Queen, board[SquareToInt(Square{ 'e', 8 })]->GetPieceType());
+		EXPECT_EQ(QueenPiece, board[SquareToInt(Square{ 'e', 8 })]->GetPieceType());
 		EXPECT_EQ(nullptr, board[SquareToInt(Square{ 'e', 7 })]);
 	}
 
@@ -349,7 +343,7 @@ namespace PawnTests {
 		//Assert
 		auto board = state->GetStateCopy();
 
-		EXPECT_EQ(Rook, board[SquareToInt(Square{ 'e', 8 })]->GetPieceType());
+		EXPECT_EQ(RookPiece, board[SquareToInt(Square{ 'e', 8 })]->GetPieceType());
 		EXPECT_EQ(nullptr, board[SquareToInt(Square{ 'e', 7 })]);
 	}
 
@@ -365,7 +359,10 @@ namespace PawnTests {
 		//Assert
 		auto board = state->GetStateCopy();
 
-		EXPECT_EQ(Bishop, board[SquareToInt(Square{ 'e', 8 })]->GetPieceType());
+		auto p = board[SquareToInt(Square{ 'e', 8 })];
+		auto t = board[SquareToInt(Square{ 'e', 8 })]->GetPieceType();
+
+		EXPECT_EQ(BishopPiece, board[SquareToInt(Square{ 'e', 8 })]->GetPieceType());
 		EXPECT_EQ(nullptr, board[SquareToInt(Square{ 'e', 7 })]);
 	}
 
@@ -381,7 +378,7 @@ namespace PawnTests {
 		//Assert
 		auto board = state->GetStateCopy();
 
-		EXPECT_EQ(Knight, board[SquareToInt(Square{ 'e', 8 })]->GetPieceType());
+		EXPECT_EQ(KnightPiece, board[SquareToInt(Square{ 'e', 8 })]->GetPieceType());
 		EXPECT_EQ(nullptr, board[SquareToInt(Square{ 'e', 7 })]);
 	}
 
@@ -427,7 +424,7 @@ namespace PawnTests {
 		//Assert
 		auto board = state->GetStateCopy();
 
-		EXPECT_EQ(Queen, board[SquareToInt(Square{ 'f', 8 })]->GetPieceType());
+		EXPECT_EQ(QueenPiece, board[SquareToInt(Square{ 'f', 8 })]->GetPieceType());
 		EXPECT_EQ(White, board[SquareToInt(Square{ 'f', 8 })]->GetPlayer());
 		EXPECT_EQ(nullptr, board[SquareToInt(Square{ 'e', 7 })]);
 	}

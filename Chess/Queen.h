@@ -1,11 +1,11 @@
 #pragma once
 #include "Piece.h"
-class Bishop :
+class Queen :
     public Piece
 {
 public:
-    Bishop(Color player) : Piece{ BishopPiece, player } {};
-    Bishop* Copy() { return new Bishop(GetPlayer()); };
+    Queen(Color player) : Piece{ QueenPiece, player } {}
+    Queen* Copy() { return new Queen(GetPlayer()); };
     int PossibleMoves(Piece** board, std::vector<Square>* movesVector);
 };
 

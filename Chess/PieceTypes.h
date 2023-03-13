@@ -1,10 +1,10 @@
 #pragma once
 
 enum PieceType {
-	King,
-	Queen,
-	Rook,
-	Knight,
-	Bishop,
-	Pawn
+	KingPiece,
+	QueenPiece,
+	RookPiece,
+	KnightPiece,
+	BishopPiece,
+	PawnPiece
 };

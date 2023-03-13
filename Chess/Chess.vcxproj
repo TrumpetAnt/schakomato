@@ -133,18 +133,29 @@
   <ItemGroup>
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="King.cpp" />
+    <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="Queen.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Rook.cpp" />
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="King.h" />
+    <ClInclude Include="Knight.h" />
+    <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="NotImplementedException.h" />
+    <ClInclude Include="Pawn.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="PieceTypes.h" />
     <ClInclude Include="PieceUtils.h" />
+    <ClInclude Include="Queen.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="StateManager.h" />
   </ItemGroup>

@@ -3,46 +3,46 @@
 PieceType GetPieceType(std::string notation, bool capture) {
 	int i = capture ? 1 : 0;
 	if (!isupper(notation[i])) {
-		return Pawn;
+		return PawnPiece;
 	}
 	return CharToPieceType(notation[i]);
 }
 
 StateManager::StateManager() {
 	board = std::make_unique<Piece* []>(64);
-	board[SquareToInt(Square{ 'a',1 })] = new Piece(Rook, White);
-	board[SquareToInt(Square{ 'b',1 })] = new Piece(Knight, White);
-	board[SquareToInt(Square{ 'c',1 })] = new Piece(Bishop, White);
-	board[SquareToInt(Square{ 'd',1 })] = new Piece(Queen, White);
-	board[SquareToInt(Square{ 'e',1 })] = new Piece(King, White);
-	board[SquareToInt(Square{ 'f',1 })] = new Piece(Bishop, White);
-	board[SquareToInt(Square{ 'g',1 })] = new Piece(Knight, White);
-	board[SquareToInt(Square{ 'h',1 })] = new Piece(Rook, White);
-	board[SquareToInt(Square{ 'a',2 })] = new Piece(Pawn, White);
-	board[SquareToInt(Square{ 'b',2 })] = new Piece(Pawn, White);
-	board[SquareToInt(Square{ 'c',2 })] = new Piece(Pawn, White);
-	board[SquareToInt(Square{ 'd',2 })] = new Piece(Pawn, White);
-	board[SquareToInt(Square{ 'e',2 })] = new Piece(Pawn, White);
-	board[SquareToInt(Square{ 'f',2 })] = new Piece(Pawn, White);
-	board[SquareToInt(Square{ 'g',2 })] = new Piece(Pawn, White);
-	board[SquareToInt(Square{ 'h',2 })] = new Piece(Pawn, White);
+	board[SquareToInt(Square{ 'a',1 })] = new Rook(White);
+	board[SquareToInt(Square{ 'b',1 })] = new Knight(White);
+	board[SquareToInt(Square{ 'c',1 })] = new Bishop(White);
+	board[SquareToInt(Square{ 'd',1 })] = new Queen(White);
+	board[SquareToInt(Square{ 'e',1 })] = new King(White);
+	board[SquareToInt(Square{ 'f',1 })] = new Bishop(White);
+	board[SquareToInt(Square{ 'g',1 })] = new Knight(White);
+	board[SquareToInt(Square{ 'h',1 })] = new Rook(White);
+	board[SquareToInt(Square{ 'a',2 })] = new Pawn(White);
+	board[SquareToInt(Square{ 'b',2 })] = new Pawn(White);
+	board[SquareToInt(Square{ 'c',2 })] = new Pawn(White);
+	board[SquareToInt(Square{ 'd',2 })] = new Pawn(White);
+	board[SquareToInt(Square{ 'e',2 })] = new Pawn(White);
+	board[SquareToInt(Square{ 'f',2 })] = new Pawn(White);
+	board[SquareToInt(Square{ 'g',2 })] = new Pawn(White);
+	board[SquareToInt(Square{ 'h',2 })] = new Pawn(White);
 
-	board[SquareToInt(Square{ 'a',8 })] = new Piece(Rook, Black);
-	board[SquareToInt(Square{ 'b',8 })] = new Piece(Knight, Black);
-	board[SquareToInt(Square{ 'c',8 })] = new Piece(Bishop, Black);
-	board[SquareToInt(Square{ 'd',8 })] = new Piece(Queen, Black);
-	board[SquareToInt(Square{ 'e',8 })] = new Piece(King, Black);
-	board[SquareToInt(Square{ 'f',8 })] = new Piece(Bishop, Black);
-	board[SquareToInt(Square{ 'g',8 })] = new Piece(Knight, Black);
-	board[SquareToInt(Square{ 'h',8 })] = new Piece(Rook, Black);
-	board[SquareToInt(Square{ 'a',7 })] = new Piece(Pawn, Black);
-	board[SquareToInt(Square{ 'b',7 })] = new Piece(Pawn, Black);
-	board[SquareToInt(Square{ 'c',7 })] = new Piece(Pawn, Black);
-	board[SquareToInt(Square{ 'd',7 })] = new Piece(Pawn, Black);
-	board[SquareToInt(Square{ 'e',7 })] = new Piece(Pawn, Black);
-	board[SquareToInt(Square{ 'f',7 })] = new Piece(Pawn, Black);
-	board[SquareToInt(Square{ 'g',7 })] = new Piece(Pawn, Black);
-	board[SquareToInt(Square{ 'h',7 })] = new Piece(Pawn, Black);
+	board[SquareToInt(Square{ 'a',8 })] = new Rook(Black);
+	board[SquareToInt(Square{ 'b',8 })] = new Knight(Black);
+	board[SquareToInt(Square{ 'c',8 })] = new Bishop(Black);
+	board[SquareToInt(Square{ 'd',8 })] = new Queen(Black);
+	board[SquareToInt(Square{ 'e',8 })] = new King(Black);
+	board[SquareToInt(Square{ 'f',8 })] = new Bishop(Black);
+	board[SquareToInt(Square{ 'g',8 })] = new Knight(Black);
+	board[SquareToInt(Square{ 'h',8 })] = new Rook(Black);
+	board[SquareToInt(Square{ 'a',7 })] = new Pawn(Black);
+	board[SquareToInt(Square{ 'b',7 })] = new Pawn(Black);
+	board[SquareToInt(Square{ 'c',7 })] = new Pawn(Black);
+	board[SquareToInt(Square{ 'd',7 })] = new Pawn(Black);
+	board[SquareToInt(Square{ 'e',7 })] = new Pawn(Black);
+	board[SquareToInt(Square{ 'f',7 })] = new Pawn(Black);
+	board[SquareToInt(Square{ 'g',7 })] = new Pawn(Black);
+	board[SquareToInt(Square{ 'h',7 })] = new Pawn(Black);
 }
 
 StateManager::StateManager(std::string boardString) {
@@ -50,7 +50,7 @@ StateManager::StateManager(std::string boardString) {
 	auto pieceString = boardString.substr(0, 4);
 	while (pieceString.length() == 4) {
 		board[SquareToInt(Square{ pieceString[2], pieceString[3] - '0' })] =
-			new Piece(GetPieceType(pieceString.substr(1, 1), false), pieceString[0] - '0' == 0 ? White : Black);
+			CreateNewPiece(GetPieceType(pieceString.substr(1, 1), false), pieceString[0] - '0' == 0 ? White : Black);
 
 		boardString = boardString.substr(4);
 		pieceString = boardString.substr(0, 4);
@@ -119,11 +119,11 @@ int StateManager::FindKnightFromSourceSquare(Square target) {
 		Square{(char)((int)target.file - 2), target.rank - 1},
 	};
 	int sourceSquare = -1;
-	
+
 	for (int i = 0; i < 8; i++) {
 		Square* sq = &sourceSquares[i];
 		if ((disambiguationSource.file != '\0' && sq->file != disambiguationSource.file) ||
-			(disambiguationSource.rank != -1 && sq->rank != disambiguationSource.rank)) {
+			(disambiguationSource.rank != 0 && sq->rank != disambiguationSource.rank)) {
 			continue;
 		}
 		if ((sq->file - 'a') < 0 ||
@@ -131,11 +131,11 @@ int StateManager::FindKnightFromSourceSquare(Square target) {
 			sq->rank < 1 ||
 			sq->rank > 8) {
 			continue;
-		} 
+		}
 		int squareInt = SquareToInt(sourceSquares[i]);
 		Piece* p = board[squareInt];
 		if (p == nullptr ||
-			p->GetPieceType() != Knight ||
+			p->GetPieceType() != KnightPiece ||
 			p->GetPlayer() != currentPlayer) {
 			continue;
 		}
@@ -147,90 +147,149 @@ int StateManager::FindKnightFromSourceSquare(Square target) {
 	return sourceSquare;
 }
 
-int StateManager::FindPieceFromTarget(Square target, PieceType type, bool capture) {
-	switch (type) {
-	case Pawn:
-		return FindPawnFromSourceSquare(target, capture);
-	case Knight:
-		return FindKnightFromSourceSquare(target);
+inline bool SquareInBoard(Square* square) {
+	auto file = square->file - 'a';
+	return
+		file >= 0 && file < 8 &&
+		square->rank > 0 && square->rank < 9;
+}
+
+int StateManager::FindBishopFromSourceSquare(Square target) {
+	int sourceSquare = -1;
+	for (int dir = 0; dir < 4; dir++) {
+		Square probe = Square{ (char)((int)target.file + (1 - 2 * (dir % 2))), target.rank + (1 - 2 * ((dir / 2) % 2))};
+		while (SquareInBoard(&probe)) {
+			auto p = board[SquareToInt(probe)];
+			if (p == nullptr) {
+				probe = Square{ (char)((int)probe.file + (1 - 2 * (dir % 2))), probe.rank + (1 - 2 * ((dir / 2) % 2)) };
+				continue;
+			}
+			if (p->GetPieceType() == BishopPiece && p->GetPlayer() == currentPlayer) {
+				if (sourceSquare != -1) {
+					throw std::invalid_argument("Unexpected ambigous move");
+				}
+				sourceSquare = SquareToInt(probe);
+			}
+			break;
+		}
+	}
+
+
+	return sourceSquare;
+}
+
+int StateManager::FindPieceFromTarget(MoveCommand command) {
+	switch (command.type) {
+	case PawnPiece:
+		return FindPawnFromSourceSquare(command.target, command.capture);
+	case KnightPiece:
+		return FindKnightFromSourceSquare(command.target);
 	default:
 		throw new NotImplementedException();
 	}
 }
 
-void StateManager::ValidateMoveToTarget(Square target, bool capture, bool enPassant) {
-	auto pieceAtTarget = board[SquareToInt(target)];
+void StateManager::BaseMoveValidation(MoveCommand command) {
+	auto pieceAtTarget = board[SquareToInt(command.target)];
 	if (pieceAtTarget != nullptr) {
-		if (pieceAtTarget->GetPlayer() != currentPlayer && !capture) {
+		if (pieceAtTarget->GetPlayer() != currentPlayer && !command.capture) {
 			throw std::invalid_argument("A capturing move is required to capture a piece.");
 		}
 		if (pieceAtTarget->GetPlayer() == this->currentPlayer) {
 			throw std::invalid_argument("Square is occupied by same player piece");
 		}
 	}
-	else if (capture && !enPassant) {
+	else if (command.capture && !command.enPassant) {
 		throw std::invalid_argument("No piece at target of capturing move");
 	}
-	else if (enPassant && enPassantCapturablePawn == -1) {
+	else if (command.enPassant && enPassantCapturablePawn == -1) {
 		throw std::invalid_argument("No legal en passant move.");
 	}
 }
 
+MoveCommand StateManager::MoveFromInput(std::string notation) {
+	if (notation.length() < 2) {
+		throw std::invalid_argument("Move requires atleast target square");
+	}
+	MoveCommand res = MoveCommand{ Square{'\0',0},Square{'\0',0},PawnPiece,false,false,false,PawnPiece };
+	if (notation[0] == 'x') {
+		res.capture = true;
+		notation = notation.substr(1);
+	}
+	PieceType type = GetPieceType(notation, false);
+	if (type != PawnPiece) {
+		res.type = type;
+		notation = notation.substr(1);
+	}
+	else {
+		const std::string enPassantSuffix = " e.p.";
+		res.enPassant = notation.length() > enPassantSuffix.length() && notation.compare(notation.length() - enPassantSuffix.length(), enPassantSuffix.length(), enPassantSuffix) == 0;
+		if (res.enPassant) {
+			notation = notation.substr(0, notation.length() - enPassantSuffix.length());
+		}
+		else {
+			PieceType promotion = GetPieceType(notation.substr(notation.length() - 1), false);
+			if (promotion != PawnPiece) {
+				if (promotion == KingPiece) {
+					throw std::invalid_argument("Cannot promote Pawn to King");
+				}
+				res.promotedTo = promotion;
+				res.promotion = true;
+				notation = notation.substr(0, notation.length() - 1);
+			}
+		}
+	}
+	if (notation.length() > 2) {
+		if (isdigit(notation[0])) {
+			res.disambiguation.rank = notation[0] - '0';
+			notation = notation.substr(1);
+		}
+		else {
+			res.disambiguation.file = notation[0];
+			notation = notation.substr(1);
+			if (isdigit(notation[0])) {
+				res.disambiguation.rank = notation[0] - '0';
+				notation = notation.substr(1);
+			}
+		}
+	}
+	res.target = Square{ notation[0], notation[1] - '0' };
+
+	return res;
+}
+
 void StateManager::Move(std::string notation)
 {
-	disambiguationSource = Square{ '\0', -1 };
 	// TODO: Add regex input validation
-	// TODO: Implement Disambiguating moves
 	// TODO: Draw offer
 	// TODO: Castling 
 	// TODO: Check 
 	// TODO: Checkmate 
 	// TODO: End of game 
-	bool capture = notation.find('x') != std::string::npos;
-	bool enPassant = notation.length() > 4 && notation.compare(notation.length() - 4, 4, "e.p.") == 0;
-	PieceType type = GetPieceType(notation, capture);
-	if (type != Pawn) {
-		notation = notation.substr(1);
-	}
-	if (capture) {
-		notation = notation.substr(1);
-	}
-	if (isalpha(notation[0]) && isalpha(notation[1])) {
-		disambiguationSource.file = notation[0];
-		notation = notation.substr(1);
-	}
-	if (notation.length() > 2 && isdigit(notation[1]) && isdigit(notation[2])) {
-		disambiguationSource.rank = notation[1];
-		char c = notation[0];
-		notation = notation.substr(1);
-		notation[0] = c;
-	}
 
-	Square target = Square{ notation[0], (notation[1] - '0') };
+	MoveCommand command = MoveFromInput(notation);
+	disambiguationSource = command.disambiguation;
+	BaseMoveValidation(command);
 
-	ValidateMoveToTarget(target, capture, enPassant);
-
-	int piecePosition = FindPieceFromTarget(target, type, capture);
+	int piecePosition = FindPieceFromTarget(command);
 	if (piecePosition == -1) {
 		throw new std::invalid_argument("Unable to execute move");
 	}
-	if (type == Pawn && target.rank == 8) {
-		if (notation.length() < 3) {
-			throw new std::invalid_argument("Pawn promotion expected, input too short");
-		}
-		board[piecePosition]->PromoteTo(CharToPieceType(notation[2]));
+	if (command.promotion) {
+		delete board[piecePosition];
+		board[piecePosition] = CreateNewPiece(command.promotedTo, currentPlayer == 0 ? White : Black);
 	}
 	int enPassantTarget = enPassantCapturablePawn;
-	enPassantCapturablePawn = board[piecePosition]->GetPieceType() == Pawn && abs(IntToSquare(piecePosition).rank - target.rank) == 2
-		? SquareToInt(target)
+	enPassantCapturablePawn = board[piecePosition]->GetPieceType() == PawnPiece && abs(IntToSquare(piecePosition).rank - command.target.rank) == 2
+		? SquareToInt(command.target)
 		: -1;
 
-	if (capture && !enPassant) {
-		delete board[SquareToInt(target)];
+	if (command.capture && !command.enPassant) {
+		delete board[SquareToInt(command.target)];
 	}
-	board[SquareToInt(target)] = board[piecePosition];
+	board[SquareToInt(command.target)] = board[piecePosition];
 	board[piecePosition] = nullptr;
-	if (enPassant) {
+	if (command.enPassant) {
 		delete board[enPassantTarget];
 		board[enPassantTarget] = nullptr;
 	}
