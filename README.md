@@ -1,1 +1,1 @@
-"# TTD Schack" 
+# TTD Schack
