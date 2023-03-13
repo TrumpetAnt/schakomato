@@ -27,7 +27,7 @@ private:
 	int FindPieceFromTarget(MoveCommand command);
 	int FindPawnFromSourceSquare(Square target, bool capture);
 	int FindKnightFromSourceSquare(Square target);
-	int FindBishopFromSourceSquare(Square target);
+	int FindBishopFromSourceSquare(MoveCommand command);
 	void BaseMoveValidation(MoveCommand command);
 
 	MoveCommand MoveFromInput(std::string notation);

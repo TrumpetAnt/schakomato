@@ -154,26 +154,36 @@ inline bool SquareInBoard(Square* square) {
 		square->rank > 0 && square->rank < 9;
 }
 
-int StateManager::FindBishopFromSourceSquare(Square target) {
+inline void ProbeBishopSquare(int dir, Square* square, Square* disambiguation) {
+	square->file = disambiguation->file == '\0' 
+		? (char)((int)square->file + 1 - 2 * (dir % 2))
+		: disambiguation->file;
+	square->rank = disambiguation->rank == 0
+		? square->rank + 1 - 2 * ((dir / 2) % 2)
+		: disambiguation->rank;
+}
+
+int StateManager::FindBishopFromSourceSquare(MoveCommand command) {
 	int sourceSquare = -1;
 	for (int dir = 0; dir < 4; dir++) {
-		Square probe = Square{ (char)((int)target.file + (1 - 2 * (dir % 2))), target.rank + (1 - 2 * ((dir / 2) % 2))};
+		Square probe = Square{ command.target.file , command.target.rank };
+		ProbeBishopSquare(dir, &probe, &command.disambiguation);
 		while (SquareInBoard(&probe)) {
-			auto p = board[SquareToInt(probe)];
-			if (p == nullptr) {
-				probe = Square{ (char)((int)probe.file + (1 - 2 * (dir % 2))), probe.rank + (1 - 2 * ((dir / 2) % 2)) };
+			auto piece = board[SquareToInt(probe)];
+			if (piece == nullptr) {
+				ProbeBishopSquare(dir, &probe, &command.disambiguation);
 				continue;
 			}
-			if (p->GetPieceType() == BishopPiece && p->GetPlayer() == currentPlayer) {
-				if (sourceSquare != -1) {
+			if (piece->GetPieceType() == BishopPiece && piece->GetPlayer() == currentPlayer) {
+				int potentialSource = SquareToInt(probe);
+				if (sourceSquare != -1 && potentialSource != sourceSquare ) {
 					throw std::invalid_argument("Unexpected ambigous move");
 				}
-				sourceSquare = SquareToInt(probe);
+				sourceSquare = potentialSource;
 			}
 			break;
 		}
 	}
-
 
 	return sourceSquare;
 }
@@ -184,6 +194,8 @@ int StateManager::FindPieceFromTarget(MoveCommand command) {
 		return FindPawnFromSourceSquare(command.target, command.capture);
 	case KnightPiece:
 		return FindKnightFromSourceSquare(command.target);
+	case BishopPiece:
+		return FindBishopFromSourceSquare(command);
 	default:
 		throw new NotImplementedException();
 	}
