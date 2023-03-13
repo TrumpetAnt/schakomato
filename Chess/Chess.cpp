@@ -2,11 +2,26 @@
 #include "StateManager.h"
 #include "Renderer.h"
 
+using namespace std;
+
 int main()
 {
-	auto state = std::make_shared<StateManager>("0pe21pe3");
-	auto renderer = std::make_unique<Renderer>(Renderer(state));
+	auto state = make_shared<StateManager>();
+	auto renderer = make_unique<Renderer>(Renderer(state));
 	renderer->PrintStateToConsole();
-	/*state->Move("e4");
-	renderer->PrintStateToConsole();*/
+	string s_in = "";
+	while (true) {
+		renderer->PrintStateToConsole();
+		cout << (state->GetCurrentPlayer() == White ? "White " : "Black ") << "can make a move" << endl;
+		cin >> s_in;
+		if (s_in.compare("exit") == 0) {
+			break;
+		}
+		try {
+			state->Move(s_in);
+		}
+		catch (exception ex) {
+			cout << "Illegal move" << endl;
+		}
+	}
 }

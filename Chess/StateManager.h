@@ -20,6 +20,7 @@ public:
 	StateManager(std::string boardString);
 	void Move(std::string notation);
 	std::unique_ptr<Piece* []> GetStateCopy();
+	Color GetCurrentPlayer() { return currentPlayer == 0 ? White : Black; };
 private:
 	std::unique_ptr<Piece*[]> board;
 	int currentPlayer = 0;

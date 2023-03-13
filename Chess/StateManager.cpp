@@ -93,7 +93,7 @@ int StateManager::FindPawnFromSourceSquare(Square target, bool capture) {
 		auto capturingPieceB = board[SquareToInt(Square{ (char)(target.file + 1), target.rank + rankModifier })];
 		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer &&
 			capturingPieceB != nullptr && capturingPieceB->GetPlayer() == currentPlayer) {
-			throw new NotImplementedException();
+			throw NotImplementedException();
 		}
 		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer) {
 			return SquareToInt(Square{ (char)(target.file - 1), target.rank + rankModifier });
@@ -197,7 +197,7 @@ int StateManager::FindPieceFromTarget(MoveCommand command) {
 	case BishopPiece:
 		return FindBishopFromSourceSquare(command);
 	default:
-		throw new NotImplementedException();
+		throw NotImplementedException();
 	}
 }
 
@@ -285,7 +285,7 @@ void StateManager::Move(std::string notation)
 
 	int piecePosition = FindPieceFromTarget(command);
 	if (piecePosition == -1) {
-		throw new std::invalid_argument("Unable to execute move");
+		throw std::invalid_argument("Unable to execute move");
 	}
 	if (command.promotion) {
 		delete board[piecePosition];

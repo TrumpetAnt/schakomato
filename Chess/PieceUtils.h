@@ -30,7 +30,7 @@ inline PieceType CharToPieceType(char c) {
 	case 'N':
 		return KnightPiece;
 	}
-	throw new std::invalid_argument("Character not a piecetype");
+	throw std::invalid_argument("Character not a piecetype");
 }
 
 inline char PieceTypeToChar(PieceType type) {
