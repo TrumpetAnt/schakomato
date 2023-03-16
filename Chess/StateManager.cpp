@@ -154,8 +154,8 @@ inline bool SquareInBoard(Square* square) {
 		square->rank > 0 && square->rank < 9;
 }
 
-inline void ProbeBishopSquare(int dir, Square* square, Square* disambiguation) {
-	square->file = disambiguation->file == '\0' 
+inline void ProbeDiagonalSquare(int dir, Square* square, Square* disambiguation) {
+	square->file = disambiguation->file == '\0'
 		? (char)((int)square->file + 1 - 2 * (dir % 2))
 		: disambiguation->file;
 	square->rank = disambiguation->rank == 0
@@ -163,15 +163,33 @@ inline void ProbeBishopSquare(int dir, Square* square, Square* disambiguation) {
 		: disambiguation->rank;
 }
 
+inline void ProbeLevelSquare(int dir, Square* square, Square* disambiguation) {
+	square->file = disambiguation->file == '\0'
+		? (char)((int)square->file + dir % 2 * (dir - 2))
+		: disambiguation->file;
+	square->rank = disambiguation->rank == 0
+		? square->rank + (dir + 1) % 2 * (1 - dir)
+		: disambiguation->rank;
+}
+
+inline void ProbeSquare(int dir, Square* square, Square* disambiguation) {
+	if (dir % 2 == 1) {
+		ProbeDiagonalSquare((dir - 1) / 2, square, disambiguation);
+	}
+	else {
+		ProbeLevelSquare(dir / 2, square, disambiguation);
+	}
+}
+
 int StateManager::FindBishopFromSourceSquare(MoveCommand command) {
 	int sourceSquare = -1;
-	for (int dir = 0; dir < 4; dir++) {
+	for (int dir : DiagonalIterator()) {
 		Square probe = Square{ command.target.file , command.target.rank };
-		ProbeBishopSquare(dir, &probe, &command.disambiguation);
+		ProbeSquare(dir, &probe, &command.disambiguation);
 		while (SquareInBoard(&probe)) {
 			auto piece = board[SquareToInt(probe)];
 			if (piece == nullptr) {
-				ProbeBishopSquare(dir, &probe, &command.disambiguation);
+				ProbeSquare(dir, &probe, &command.disambiguation);
 				continue;
 			}
 			if (piece->GetPieceType() == BishopPiece && piece->GetPlayer() == currentPlayer) {
@@ -188,6 +206,30 @@ int StateManager::FindBishopFromSourceSquare(MoveCommand command) {
 	return sourceSquare;
 }
 
+int StateManager::FindRookFromSourceSquare(MoveCommand command) {
+	int sourceSquare = -1;
+	for (int dir : LevelIterator()) {
+		Square probe = Square{ command.target.file , command.target.rank };
+		ProbeSquare(dir, &probe, &command.disambiguation);
+		while (SquareInBoard(&probe)) {
+			auto piece = board[SquareToInt(probe)];
+			if (piece == nullptr) {
+				ProbeSquare(dir, &probe, &command.disambiguation);
+				continue;
+			}
+			if (piece->GetPieceType() == RookPiece && piece->GetPlayer() == currentPlayer) {
+				int potentialSource = SquareToInt(probe);
+				if (sourceSquare != -1 && potentialSource != sourceSquare) {
+					throw std::invalid_argument("Unexpected ambigous move");
+				}
+				sourceSquare = potentialSource;
+			}
+			break;
+		}
+	}
+	return sourceSquare;
+}
+
 int StateManager::FindPieceFromTarget(MoveCommand command) {
 	switch (command.type) {
 	case PawnPiece:
@@ -196,6 +238,8 @@ int StateManager::FindPieceFromTarget(MoveCommand command) {
 		return FindKnightFromSourceSquare(command.target);
 	case BishopPiece:
 		return FindBishopFromSourceSquare(command);
+	case RookPiece:
+		return FindRookFromSourceSquare(command);
 	default:
 		throw NotImplementedException();
 	}

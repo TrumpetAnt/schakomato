@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="DirectionIterators.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="MoveCommand.h" />

@@ -43,6 +43,7 @@
     <ClCompile Include="KnightTests.cpp" />
     <ClCompile Include="PawnTests.cpp" />
     <ClCompile Include="RendererTests.cpp" />
+    <ClCompile Include="RookTests.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -62,6 +63,8 @@
     <Text Include="PawnEnPassantTest.txt" />
     <Text Include="PawnMovementTest.txt" />
     <Text Include="PawnUpgradeTest.txt" />
+    <Text Include="RookCaptureTest.txt" />
+    <Text Include="RookMovementTest.txt" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

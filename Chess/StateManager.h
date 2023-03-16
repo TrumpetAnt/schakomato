@@ -12,6 +12,7 @@
 #include "Rook.h"
 #include "Queen.h"
 #include "King.h"
+#include "DirectionIterators.h"
 
 class StateManager
 {
@@ -29,6 +30,7 @@ private:
 	int FindPawnFromSourceSquare(Square target, bool capture);
 	int FindKnightFromSourceSquare(Square target);
 	int FindBishopFromSourceSquare(MoveCommand command);
+	int FindRookFromSourceSquare(MoveCommand command);
 	void BaseMoveValidation(MoveCommand command);
 
 	MoveCommand MoveFromInput(std::string notation);

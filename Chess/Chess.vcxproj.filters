@@ -92,5 +92,8 @@
     <ClInclude Include="King.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DirectionIterators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
