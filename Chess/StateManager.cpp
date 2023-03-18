@@ -147,54 +147,17 @@ int StateManager::FindKnightFromSourceSquare(Square target) {
 	return sourceSquare;
 }
 
-inline bool SquareInBoard(Square* square) {
-	auto file = square->file - 'a';
-	return
-		file >= 0 && file < 8 &&
-		square->rank > 0 && square->rank < 9;
-}
-
-inline void ProbeDiagonalSquare(int dir, Square* square, Square* disambiguation) {
-	square->file = disambiguation->file == '\0'
-		? (char)((int)square->file + 1 - 2 * (dir % 2))
-		: disambiguation->file;
-	square->rank = disambiguation->rank == 0
-		? square->rank + 1 - 2 * ((dir / 2) % 2)
-		: disambiguation->rank;
-}
-
-inline void ProbeLevelSquare(int dir, Square* square, Square* disambiguation) {
-	square->file = disambiguation->file == '\0'
-		? (char)((int)square->file + dir % 2 * (dir - 2))
-		: disambiguation->file;
-	square->rank = disambiguation->rank == 0
-		? square->rank + (dir + 1) % 2 * (1 - dir)
-		: disambiguation->rank;
-}
-
-inline void ProbeSquare(int dir, Square* square, Square* disambiguation) {
-	if (dir % 2 == 1) {
-		ProbeDiagonalSquare((dir - 1) / 2, square, disambiguation);
-	}
-	else {
-		ProbeLevelSquare(dir / 2, square, disambiguation);
-	}
-}
-
 int StateManager::FindBishopFromSourceSquare(MoveCommand command) {
 	int sourceSquare = -1;
 	for (int dir : DiagonalIterator()) {
-		Square probe = Square{ command.target.file , command.target.rank };
-		ProbeSquare(dir, &probe, &command.disambiguation);
-		while (SquareInBoard(&probe)) {
+		for (Square probe : SquareSearchIterator(Square{ command.target.file , command.target.rank }, command.disambiguation, dir)) {
 			auto piece = board[SquareToInt(probe)];
 			if (piece == nullptr) {
-				ProbeSquare(dir, &probe, &command.disambiguation);
 				continue;
 			}
 			if (piece->GetPieceType() == BishopPiece && piece->GetPlayer() == currentPlayer) {
 				int potentialSource = SquareToInt(probe);
-				if (sourceSquare != -1 && potentialSource != sourceSquare ) {
+				if (sourceSquare != -1 && potentialSource != sourceSquare) {
 					throw std::invalid_argument("Unexpected ambigous move");
 				}
 				sourceSquare = potentialSource;
@@ -209,12 +172,9 @@ int StateManager::FindBishopFromSourceSquare(MoveCommand command) {
 int StateManager::FindRookFromSourceSquare(MoveCommand command) {
 	int sourceSquare = -1;
 	for (int dir : LevelIterator()) {
-		Square probe = Square{ command.target.file , command.target.rank };
-		ProbeSquare(dir, &probe, &command.disambiguation);
-		while (SquareInBoard(&probe)) {
+		for (Square probe : SquareSearchIterator(Square{ command.target.file , command.target.rank }, command.disambiguation, dir)) {
 			auto piece = board[SquareToInt(probe)];
 			if (piece == nullptr) {
-				ProbeSquare(dir, &probe, &command.disambiguation);
 				continue;
 			}
 			if (piece->GetPieceType() == RookPiece && piece->GetPlayer() == currentPlayer) {
@@ -227,6 +187,7 @@ int StateManager::FindRookFromSourceSquare(MoveCommand command) {
 			break;
 		}
 	}
+
 	return sourceSquare;
 }
 

@@ -70,3 +70,4 @@ inline Piece* CreateNewPiece(PieceType type, Color player) {
 		throw std::invalid_argument("Unhandeled switch case");
 	}
 }
+

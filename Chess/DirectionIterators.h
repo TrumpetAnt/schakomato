@@ -3,8 +3,6 @@
 
 class DirectionalIterator {
 public:
-    int increment = 2;
-
     class iterator : public std::iterator<
         std::input_iterator_tag,  
         int,                      

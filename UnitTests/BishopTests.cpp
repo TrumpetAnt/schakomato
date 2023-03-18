@@ -48,7 +48,7 @@ namespace BishopTests {
 		EXPECT_ANY_THROW(state->Move("Bc2"));
 	}
 
-	TEST(BishopMovement, NoCapture_MoveOverPiece_ThrowException) {
+ 	TEST(BishopMovement, NoCapture_MoveOverPiece_ThrowException) {
 		// Arrange
 		auto str = slurp("C:\\Source\\Chess\\UnitTests\\BishopMovementTest.txt");
 		StateManager* state = new StateManager(str);

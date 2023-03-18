@@ -140,6 +140,7 @@
     <ClCompile Include="Queen.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Rook.cpp" />
+    <ClCompile Include="SquareSearchIterator.cpp" />
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Square.h" />
+    <ClInclude Include="SquareSearchIterator.h" />
     <ClInclude Include="StateManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -13,6 +13,7 @@
 #include "Queen.h"
 #include "King.h"
 #include "DirectionIterators.h"
+#include "SquareSearchIterator.h"
 
 class StateManager
 {

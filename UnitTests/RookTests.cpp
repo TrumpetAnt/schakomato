@@ -63,13 +63,13 @@ namespace RookTests {
 		StateManager* state = new StateManager(str);
 
 		// Act
-		state->Move("xRa8");
+		state->Move("xRb8");
 
 		// Assert
 		auto board = state->GetStateCopy();
 		Piece* result;
 
-		result = board[SquareToInt(Square{ 'a', 8 })];
+		result = board[SquareToInt(Square{ 'b', 8 })];
 		EXPECT_NE(nullptr, result);
 		EXPECT_EQ(RookPiece, result->GetPieceType());
 		EXPECT_EQ(White, result->GetPlayer());
