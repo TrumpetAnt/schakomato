@@ -147,15 +147,15 @@ int StateManager::FindKnightFromSourceSquare(Square target) {
 	return sourceSquare;
 }
 
-int StateManager::FindBishopFromSourceSquare(MoveCommand command) {
+int StateManager::FindPieceFromSourceSquare(MoveCommand command, DirectionalIterator* directionalIterator) {
 	int sourceSquare = -1;
-	for (int dir : DiagonalIterator()) {
+	for (int dir : *directionalIterator) {
 		for (Square probe : SquareSearchIterator(Square{ command.target.file , command.target.rank }, command.disambiguation, dir)) {
 			auto piece = board[SquareToInt(probe)];
 			if (piece == nullptr) {
 				continue;
 			}
-			if (piece->GetPieceType() == BishopPiece && piece->GetPlayer() == currentPlayer) {
+			if (piece->GetPieceType() == command.type && piece->GetPlayer() == currentPlayer) {
 				int potentialSource = SquareToInt(probe);
 				if (sourceSquare != -1 && potentialSource != sourceSquare) {
 					throw std::invalid_argument("Unexpected ambigous move");
@@ -165,29 +165,7 @@ int StateManager::FindBishopFromSourceSquare(MoveCommand command) {
 			break;
 		}
 	}
-
-	return sourceSquare;
-}
-
-int StateManager::FindRookFromSourceSquare(MoveCommand command) {
-	int sourceSquare = -1;
-	for (int dir : LevelIterator()) {
-		for (Square probe : SquareSearchIterator(Square{ command.target.file , command.target.rank }, command.disambiguation, dir)) {
-			auto piece = board[SquareToInt(probe)];
-			if (piece == nullptr) {
-				continue;
-			}
-			if (piece->GetPieceType() == RookPiece && piece->GetPlayer() == currentPlayer) {
-				int potentialSource = SquareToInt(probe);
-				if (sourceSquare != -1 && potentialSource != sourceSquare) {
-					throw std::invalid_argument("Unexpected ambigous move");
-				}
-				sourceSquare = potentialSource;
-			}
-			break;
-		}
-	}
-
+	delete directionalIterator;
 	return sourceSquare;
 }
 
@@ -198,9 +176,11 @@ int StateManager::FindPieceFromTarget(MoveCommand command) {
 	case KnightPiece:
 		return FindKnightFromSourceSquare(command.target);
 	case BishopPiece:
-		return FindBishopFromSourceSquare(command);
+		return FindPieceFromSourceSquare(command, new DiagonalIterator());
 	case RookPiece:
-		return FindRookFromSourceSquare(command);
+		return FindPieceFromSourceSquare(command, new LevelIterator());
+	case QueenPiece:
+		return FindPieceFromSourceSquare(command, new DirectionalIterator());
 	default:
 		throw NotImplementedException();
 	}

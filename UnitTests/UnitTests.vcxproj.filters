@@ -8,6 +8,7 @@
     <ClCompile Include="KnightTests.cpp" />
     <ClCompile Include="BishopTests.cpp" />
     <ClCompile Include="RookTests.cpp" />
+    <ClCompile Include="QueenMovement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -46,6 +47,12 @@
       <Filter>Testdata</Filter>
     </Text>
     <Text Include="RookCaptureTest.txt">
+      <Filter>Testdata</Filter>
+    </Text>
+    <Text Include="QueenCaptureTest.txt">
+      <Filter>Testdata</Filter>
+    </Text>
+    <Text Include="QueenMovementTest.txt">
       <Filter>Testdata</Filter>
     </Text>
   </ItemGroup>
