@@ -28,8 +28,8 @@ private:
 	int currentPlayer = 0;
 
 	int FindPieceFromTarget(MoveCommand command);
-	int FindPawnFromSourceSquare(Square target, bool capture);
-	int FindKnightFromSourceSquare(Square target);
+	int FindPawnFromSourceSquare(MoveCommand command);
+	int FindKnightFromSourceSquare(MoveCommand command);
 	int FindPieceFromSourceSquare(MoveCommand command, DirectionalIterator* directionalIterator);
 	void BaseMoveValidation(MoveCommand command);
 

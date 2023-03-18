@@ -67,56 +67,56 @@ std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
 	return result;
 }
 
-int StateManager::FindPawnFromSourceSquare(Square target, bool capture) {
+int StateManager::FindPawnFromSourceSquare(MoveCommand command) {
 	int rankModifier = currentPlayer == White ? -1 : 1;
-	if (!capture) {
-		auto pieceAtTarget = board[SquareToInt(Square{ target.file, target.rank + rankModifier })];
+	if (!command.capture) {
+		auto pieceAtTarget = board[SquareToInt(Square{ command.target.file, command.target.rank + rankModifier })];
 		if (pieceAtTarget != nullptr && pieceAtTarget->GetPlayer() == currentPlayer) {
-			return SquareToInt(Square{ target.file, target.rank + rankModifier });
+			return SquareToInt(Square{ command.target.file, command.target.rank + rankModifier });
 		}
-		auto secondPiece = board[SquareToInt(Square{ target.file, target.rank + rankModifier * 2 })];
-		if (target.rank == (currentPlayer == White ? 4 : 5) &&
+		auto secondPiece = board[SquareToInt(Square{ command.target.file, command.target.rank + rankModifier * 2 })];
+		if (command.target.rank == (currentPlayer == White ? 4 : 5) &&
 			secondPiece != nullptr &&
 			pieceAtTarget == nullptr) {
-			return SquareToInt(Square{ target.file, target.rank + rankModifier * 2 });
+			return SquareToInt(Square{ command.target.file, command.target.rank + rankModifier * 2 });
 		}
 	}
 	else {
 		if (disambiguationSource.file != '\0') {
-			disambiguationSource.rank = target.rank + rankModifier;
+			disambiguationSource.rank = command.target.rank + rankModifier;
 			auto capturingPiece = board[SquareToInt(disambiguationSource)];
 			if (capturingPiece != nullptr && capturingPiece->GetPlayer() == currentPlayer) {
 				return SquareToInt(disambiguationSource);
 			}
 		}
-		auto capturingPieceA = board[SquareToInt(Square{ (char)(target.file - 1), target.rank + rankModifier })];
-		auto capturingPieceB = board[SquareToInt(Square{ (char)(target.file + 1), target.rank + rankModifier })];
+		auto capturingPieceA = board[SquareToInt(Square{ (char)(command.target.file - 1), command.target.rank + rankModifier })];
+		auto capturingPieceB = board[SquareToInt(Square{ (char)(command.target.file + 1), command.target.rank + rankModifier })];
 		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer &&
 			capturingPieceB != nullptr && capturingPieceB->GetPlayer() == currentPlayer) {
 			throw NotImplementedException();
 		}
 		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer) {
-			return SquareToInt(Square{ (char)(target.file - 1), target.rank + rankModifier });
+			return SquareToInt(Square{ (char)(command.target.file - 1), command.target.rank + rankModifier });
 		}
 		if (capturingPieceB != nullptr && capturingPieceB->GetPlayer() == currentPlayer) {
-			return SquareToInt(Square{ (char)(target.file + 1), target.rank + rankModifier });
+			return SquareToInt(Square{ (char)(command.target.file + 1), command.target.rank + rankModifier });
 		}
 	}
 
 	return -1;
 }
 
-int StateManager::FindKnightFromSourceSquare(Square target) {
-	int targetInt = SquareToInt(target);
+int StateManager::FindKnightFromSourceSquare(MoveCommand command) {
+	int targetInt = SquareToInt(command.target);
 	Square sourceSquares[8] = {
-		Square{(char)((int)target.file + 1), target.rank + 2},
-		Square{(char)((int)target.file + 2), target.rank + 1},
-		Square{(char)((int)target.file - 1), target.rank + 2},
-		Square{(char)((int)target.file - 2), target.rank + 1},
-		Square{(char)((int)target.file + 1), target.rank - 2},
-		Square{(char)((int)target.file + 2), target.rank - 1},
-		Square{(char)((int)target.file - 1), target.rank - 2},
-		Square{(char)((int)target.file - 2), target.rank - 1},
+		Square{(char)((int)command.target.file + 1), command.target.rank + 2},
+		Square{(char)((int)command.target.file + 2), command.target.rank + 1},
+		Square{(char)((int)command.target.file - 1), command.target.rank + 2},
+		Square{(char)((int)command.target.file - 2), command.target.rank + 1},
+		Square{(char)((int)command.target.file + 1), command.target.rank - 2},
+		Square{(char)((int)command.target.file + 2), command.target.rank - 1},
+		Square{(char)((int)command.target.file - 1), command.target.rank - 2},
+		Square{(char)((int)command.target.file - 2), command.target.rank - 1},
 	};
 	int sourceSquare = -1;
 
@@ -172,9 +172,9 @@ int StateManager::FindPieceFromSourceSquare(MoveCommand command, DirectionalIter
 int StateManager::FindPieceFromTarget(MoveCommand command) {
 	switch (command.type) {
 	case PawnPiece:
-		return FindPawnFromSourceSquare(command.target, command.capture);
+		return FindPawnFromSourceSquare(command);
 	case KnightPiece:
-		return FindKnightFromSourceSquare(command.target);
+		return FindKnightFromSourceSquare(command);
 	case BishopPiece:
 		return FindPieceFromSourceSquare(command, new DiagonalIterator());
 	case RookPiece:
