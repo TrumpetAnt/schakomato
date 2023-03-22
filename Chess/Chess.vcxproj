@@ -153,6 +153,7 @@
     <ClInclude Include="NotImplementedException.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Piece.h" />
+    <ClInclude Include="PieceTypeIterator.h" />
     <ClInclude Include="PieceTypes.h" />
     <ClInclude Include="PieceUtils.h" />
     <ClInclude Include="Queen.h" />

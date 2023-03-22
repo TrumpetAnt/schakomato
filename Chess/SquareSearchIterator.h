@@ -58,11 +58,18 @@ public:
 	Square start;
 	Square disambiguation;
 	int direction;
+	bool kingMove = false;
 	SquareSearchIterator(Square start, int direction) : start(start), direction(direction), disambiguation(Square{ '\0', 0 }) {}
+	SquareSearchIterator(Square start, int direction, bool kingMove) : start(start), direction(direction), disambiguation(Square{ '\0', 0 }), kingMove(kingMove) {}
 	SquareSearchIterator(Square start, Square disambiguation, int direction) : start(start), direction(direction), disambiguation(disambiguation) {}
 
 	iterator begin() {
-		if (disambiguation.file != '\0' && disambiguation.rank != 0) {
+		if (kingMove) {
+			auto kingIter = iterator(start, direction, true);
+			kingIter++;
+			return kingIter;
+		}
+		else if (disambiguation.file != '\0' && disambiguation.rank != 0) {
 			start = disambiguation;
 			return iterator(start, direction, true);
 		}

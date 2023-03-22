@@ -26,6 +26,7 @@ StateManager::StateManager() {
 	board[SquareToInt(Square{ 'f',2 })] = new Pawn(White);
 	board[SquareToInt(Square{ 'g',2 })] = new Pawn(White);
 	board[SquareToInt(Square{ 'h',2 })] = new Pawn(White);
+	whiteKingLocation = Square{ 'e',1 };
 
 	board[SquareToInt(Square{ 'a',8 })] = new Rook(Black);
 	board[SquareToInt(Square{ 'b',8 })] = new Knight(Black);
@@ -43,6 +44,34 @@ StateManager::StateManager() {
 	board[SquareToInt(Square{ 'f',7 })] = new Pawn(Black);
 	board[SquareToInt(Square{ 'g',7 })] = new Pawn(Black);
 	board[SquareToInt(Square{ 'h',7 })] = new Pawn(Black);
+	blackKingLocation = Square{ 'e',8 };
+}
+
+bool StateManager::CheckStateForCheck() {
+	// TODO: Promote pawn to pieces which put king in check, i.e. queen and knight
+	MoveCommand command;
+	command.enPassant = false;
+	command.capture = true;
+	command.target = currentPlayer == White ? blackKingLocation : whiteKingLocation;
+	command.promotion = command.target.rank == (currentPlayer == White ? 8 : 1);
+	command.promotedTo = QueenPiece;
+	command.disambiguation = Square{ '\0',0 };
+	if (command.target == Square{ '\0',0 }) {
+		return false;
+	}
+
+	for (PieceType p : PieceTypeIterator()) {
+		command.type = p;
+		std::vector<int>* pieces = FindPieceFromTarget(command);
+		bool inCheck = pieces->size() > 0;
+		pieces->clear();
+		delete pieces;
+		if (inCheck) {
+			return true;
+		}
+	}
+	
+	return false;
 }
 
 StateManager::StateManager(std::string boardString) {
@@ -67,47 +96,45 @@ std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
 	return result;
 }
 
-int StateManager::FindPawnFromSourceSquare(MoveCommand command) {
+std::vector<int>* StateManager::FindPawnFromSourceSquare(MoveCommand command) {
+	std::vector<int>* res= new std::vector<int>();
 	int rankModifier = currentPlayer == White ? -1 : 1;
 	if (!command.capture) {
 		auto pieceAtTarget = board[SquareToInt(Square{ command.target.file, command.target.rank + rankModifier })];
 		if (pieceAtTarget != nullptr && pieceAtTarget->GetPlayer() == currentPlayer) {
-			return SquareToInt(Square{ command.target.file, command.target.rank + rankModifier });
+			res->push_back( SquareToInt(Square{ command.target.file, command.target.rank + rankModifier }));
 		}
 		auto secondPiece = board[SquareToInt(Square{ command.target.file, command.target.rank + rankModifier * 2 })];
 		if (command.target.rank == (currentPlayer == White ? 4 : 5) &&
 			secondPiece != nullptr &&
 			pieceAtTarget == nullptr) {
-			return SquareToInt(Square{ command.target.file, command.target.rank + rankModifier * 2 });
+			res->push_back(SquareToInt(Square{ command.target.file, command.target.rank + rankModifier * 2 }));
 		}
 	}
 	else {
-		if (disambiguationSource.file != '\0') {
-			disambiguationSource.rank = command.target.rank + rankModifier;
-			auto capturingPiece = board[SquareToInt(disambiguationSource)];
+		if (command.disambiguation.file != '\0') {
+			command.disambiguation.rank = command.target.rank + rankModifier;
+			auto capturingPiece = board[SquareToInt(command.disambiguation)];
 			if (capturingPiece != nullptr && capturingPiece->GetPlayer() == currentPlayer) {
-				return SquareToInt(disambiguationSource);
+				res->push_back( SquareToInt(command.disambiguation));
 			}
+			return res;
 		}
 		auto capturingPieceA = board[SquareToInt(Square{ (char)(command.target.file - 1), command.target.rank + rankModifier })];
 		auto capturingPieceB = board[SquareToInt(Square{ (char)(command.target.file + 1), command.target.rank + rankModifier })];
-		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer &&
-			capturingPieceB != nullptr && capturingPieceB->GetPlayer() == currentPlayer) {
-			throw NotImplementedException();
-		}
 		if (capturingPieceA != nullptr && capturingPieceA->GetPlayer() == currentPlayer) {
-			return SquareToInt(Square{ (char)(command.target.file - 1), command.target.rank + rankModifier });
+			res->push_back( SquareToInt(Square{ (char)(command.target.file - 1), command.target.rank + rankModifier }));
 		}
 		if (capturingPieceB != nullptr && capturingPieceB->GetPlayer() == currentPlayer) {
-			return SquareToInt(Square{ (char)(command.target.file + 1), command.target.rank + rankModifier });
+			res->push_back(SquareToInt(Square{ (char)(command.target.file + 1), command.target.rank + rankModifier }));
 		}
 	}
 
-	return -1;
+	return res;
 }
 
-int StateManager::FindKnightFromSourceSquare(MoveCommand command) {
-	int targetInt = SquareToInt(command.target);
+std::vector<int>* StateManager::FindKnightFromSourceSquare(MoveCommand command) {
+	std::vector<int>* res = new std::vector<int>();
 	Square sourceSquares[8] = {
 		Square{(char)((int)command.target.file + 1), command.target.rank + 2},
 		Square{(char)((int)command.target.file + 2), command.target.rank + 1},
@@ -118,12 +145,11 @@ int StateManager::FindKnightFromSourceSquare(MoveCommand command) {
 		Square{(char)((int)command.target.file - 1), command.target.rank - 2},
 		Square{(char)((int)command.target.file - 2), command.target.rank - 1},
 	};
-	int sourceSquare = -1;
 
 	for (int i = 0; i < 8; i++) {
 		Square* sq = &sourceSquares[i];
-		if ((disambiguationSource.file != '\0' && sq->file != disambiguationSource.file) ||
-			(disambiguationSource.rank != 0 && sq->rank != disambiguationSource.rank)) {
+		if ((command.disambiguation.file != '\0' && sq->file != command.disambiguation.file) ||
+			(command.disambiguation.rank != 0 && sq->rank != command.disambiguation.rank)) {
 			continue;
 		}
 		if ((sq->file - 'a') < 0 ||
@@ -139,16 +165,30 @@ int StateManager::FindKnightFromSourceSquare(MoveCommand command) {
 			p->GetPlayer() != currentPlayer) {
 			continue;
 		}
-		if (sourceSquare != -1) {
-			throw std::invalid_argument("Unexpected ambiguous move");
-		}
-		sourceSquare = squareInt;
+		res->push_back( squareInt);
 	}
-	return sourceSquare;
+	return res;
 }
 
-int StateManager::FindPieceFromSourceSquare(MoveCommand command, DirectionalIterator* directionalIterator) {
-	int sourceSquare = -1;
+std::vector<int>* StateManager::FindKingPieceFromSourceSquare(MoveCommand command) {
+	std::vector<int>* res = new std::vector<int>();
+	for (int dir : DirectionalIterator()) {
+		for (Square probe : SquareSearchIterator(Square{ command.target.file , command.target.rank }, dir, true)) {
+			auto piece = board[SquareToInt(probe)];
+			if (piece == nullptr) {
+				continue;
+			}
+			if (piece->GetPieceType() == command.type && piece->GetPlayer() == currentPlayer) {
+				res->push_back(SquareToInt(probe));
+			}
+			break;
+		}
+	}
+	return res;
+}
+
+std::vector<int>* StateManager::FindPieceFromSourceSquare(MoveCommand command, DirectionalIterator* directionalIterator) {
+	std::vector<int>* res = new std::vector<int>();
 	for (int dir : *directionalIterator) {
 		for (Square probe : SquareSearchIterator(Square{ command.target.file , command.target.rank }, command.disambiguation, dir)) {
 			auto piece = board[SquareToInt(probe)];
@@ -156,20 +196,16 @@ int StateManager::FindPieceFromSourceSquare(MoveCommand command, DirectionalIter
 				continue;
 			}
 			if (piece->GetPieceType() == command.type && piece->GetPlayer() == currentPlayer) {
-				int potentialSource = SquareToInt(probe);
-				if (sourceSquare != -1 && potentialSource != sourceSquare) {
-					throw std::invalid_argument("Unexpected ambigous move");
-				}
-				sourceSquare = potentialSource;
+				res->push_back(SquareToInt(probe));
 			}
 			break;
 		}
 	}
 	delete directionalIterator;
-	return sourceSquare;
+	return res;
 }
 
-int StateManager::FindPieceFromTarget(MoveCommand command) {
+std::vector<int>* StateManager::FindPieceFromTarget(MoveCommand command) {
 	switch (command.type) {
 	case PawnPiece:
 		return FindPawnFromSourceSquare(command);
@@ -181,6 +217,8 @@ int StateManager::FindPieceFromTarget(MoveCommand command) {
 		return FindPieceFromSourceSquare(command, new LevelIterator());
 	case QueenPiece:
 		return FindPieceFromSourceSquare(command, new DirectionalIterator());
+	case KingPiece:
+		return FindKingPieceFromSourceSquare(command);
 	default:
 		throw NotImplementedException();
 	}
@@ -208,7 +246,7 @@ MoveCommand StateManager::MoveFromInput(std::string notation) {
 	if (notation.length() < 2) {
 		throw std::invalid_argument("Move requires atleast target square");
 	}
-	MoveCommand res = MoveCommand{ Square{'\0',0},Square{'\0',0},PawnPiece,false,false,false,PawnPiece };
+	MoveCommand res = MoveCommand{ Square{ '\0' , 0 }, Square{ '\0' , 0 }, PawnPiece, false, false, false, PawnPiece };
 	if (notation[0] == 'x') {
 		res.capture = true;
 		notation = notation.substr(1);
@@ -259,19 +297,23 @@ void StateManager::Move(std::string notation)
 {
 	// TODO: Add regex input validation
 	// TODO: Draw offer
-	// TODO: Castling 
-	// TODO: Check 
-	// TODO: Checkmate 
+	// TODO: Castling  
+	// TODO: Check-mate
 	// TODO: End of game 
 
 	MoveCommand command = MoveFromInput(notation);
-	disambiguationSource = command.disambiguation;
 	BaseMoveValidation(command);
 
-	int piecePosition = FindPieceFromTarget(command);
-	if (piecePosition == -1) {
-		throw std::invalid_argument("Unable to execute move");
+	std::vector<int>* possibleMoves = FindPieceFromTarget(command);
+	while (possibleMoves->size() > 1 && ((*possibleMoves)[possibleMoves->size() - 2] == (*possibleMoves)[possibleMoves->size() - 1])) {
+		possibleMoves->pop_back();
 	}
+	if (possibleMoves->size() != 1) {
+		throw std::invalid_argument("Expected single possible move, got " + (possibleMoves->size() + '0'));
+	}
+	int piecePosition = possibleMoves->front();
+	possibleMoves->clear();
+	delete possibleMoves;
 	if (command.promotion) {
 		delete board[piecePosition];
 		board[piecePosition] = CreateNewPiece(command.promotedTo, currentPlayer == 0 ? White : Black);
@@ -280,6 +322,10 @@ void StateManager::Move(std::string notation)
 	enPassantCapturablePawn = board[piecePosition]->GetPieceType() == PawnPiece && abs(IntToSquare(piecePosition).rank - command.target.rank) == 2
 		? SquareToInt(command.target)
 		: -1;
+
+	if (CheckStateForCheck()) {
+		throw std::invalid_argument("what in gods name");
+	}
 
 	if (command.capture && !command.enPassant) {
 		delete board[SquareToInt(command.target)];

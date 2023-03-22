@@ -101,5 +101,8 @@
     <ClInclude Include="SquareSearchIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PieceTypeIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
