@@ -15,7 +15,7 @@ namespace BishopTests {
 
 	TEST(BishopMovement, NoCapture_BothPlayers) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\BishopMovementTest.txt");
+		auto str = slurp("../../UnitTests/BishopMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -41,7 +41,7 @@ namespace BishopTests {
 
 	TEST(BishopMovement, NoCapture_FriendlyPiece_ThrowException) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\BishopMovementTest.txt");
+		auto str = slurp("../../UnitTests/BishopMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -50,7 +50,7 @@ namespace BishopTests {
 
  	TEST(BishopMovement, NoCapture_MoveOverPiece_ThrowException) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\BishopMovementTest.txt");
+		auto str = slurp("../../UnitTests/BishopMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -59,7 +59,7 @@ namespace BishopTests {
 
 	TEST(BishopCapture, Captures) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\BishopCaptureTest.txt");
+		auto str = slurp("../../UnitTests/BishopCaptureTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -80,7 +80,7 @@ namespace BishopTests {
 
 	TEST(BishopCapture, CaptureDisambiguation) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\BishopCaptureTest.txt");
+		auto str = slurp("../../UnitTests/BishopCaptureTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -103,7 +103,7 @@ namespace BishopTests {
 
 	TEST(BishopCapture, CaptureDisambiguation_MissingSource_ThrowsException) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\BishopMovementTest.txt");
+		auto str = slurp("../../UnitTests/BishopMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act

@@ -79,7 +79,7 @@ namespace KnightTests {
 
 	TEST(KnightCapture, Captures) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\KnightMovementTest.txt");
+		auto str = slurp("../../UnitTests/KnightMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -98,7 +98,7 @@ namespace KnightTests {
 
 	TEST(KnightCapture, CaptureDisambiguation) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\KnightMovementTest.txt");
+		auto str = slurp("../../UnitTests/KnightMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -120,7 +120,7 @@ namespace KnightTests {
 
 	TEST(KnightCapture, CaptureDisambiguation_MissingSource_ThrowsException) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\KnightMovementTest.txt");
+		auto str = slurp("../../UnitTests/KnightMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act

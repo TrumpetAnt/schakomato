@@ -15,7 +15,7 @@ namespace QueenTests {
 
 	TEST(QueenCapture, Captures) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\QueenCaptureTest.txt");
+		auto str = slurp("../../UnitTests/QueenCaptureTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -36,7 +36,7 @@ namespace QueenTests {
 
 	TEST(QueenMovement, NoCaptures) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\QueenMovementTest.txt");
+		auto str = slurp("../../UnitTests/QueenMovementTest.txt");
 		EXPECT_TRUE(str.length() > 0);
 		StateManager* state = new StateManager(str);
 

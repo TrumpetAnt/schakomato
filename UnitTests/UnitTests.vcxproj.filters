@@ -9,6 +9,7 @@
     <ClCompile Include="BishopTests.cpp" />
     <ClCompile Include="RookTests.cpp" />
     <ClCompile Include="QueenMovement.cpp" />
+    <ClCompile Include="KingTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -55,5 +56,9 @@
     <Text Include="QueenMovementTest.txt">
       <Filter>Testdata</Filter>
     </Text>
+    <Text Include="KingRulesTest.txt">
+      <Filter>Testdata</Filter>
+    </Text>
+    <Text Include="KingRulesTest2.txt" />
   </ItemGroup>
 </Project>

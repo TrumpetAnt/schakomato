@@ -83,7 +83,7 @@ namespace PawnTests {
 
 	TEST(PawnMovement, NoCapture_SingleMove_ThrowsException_NoPieceFound) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnMovementTest.txt");
+		auto str = slurp("../../UnitTests/PawnMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Assert
@@ -92,7 +92,7 @@ namespace PawnTests {
 
 	TEST(PawnMovement, NoCapture_SingleMove_ThrowsException_MovingToOccupiedSquare) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnMovementTest.txt");
+		auto str = slurp("../../UnitTests/PawnMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Assert
@@ -101,7 +101,7 @@ namespace PawnTests {
 
 	TEST(PawnMovement, NoCapture_DoubleMove_ThrowsException_MovingOverSquare) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnMovementTest.txt");
+		auto str = slurp("../../UnitTests/PawnMovementTest.txt");
 		EXPECT_NE(0, str.length());
 
 		StateManager* state = new StateManager(str);
@@ -165,7 +165,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_SingleMove) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+		auto str = slurp("../../UnitTests/PawnCapturingTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -183,7 +183,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_SingleMove_SecondOption) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+		auto str = slurp("../../UnitTests/PawnCapturingTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -201,7 +201,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_MultipleCaptures) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+		auto str = slurp("../../UnitTests/PawnCapturingTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -231,7 +231,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_SingleMove_Disambiguation_WithPromotion) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+		auto str = slurp("../../UnitTests/PawnCapturingTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -250,7 +250,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_ThrowsException_NoTarget) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+		auto str = slurp("../../UnitTests/PawnCapturingTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -260,7 +260,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_ThrowsException_NoSource) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+		auto str = slurp("../../UnitTests/PawnCapturingTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -270,7 +270,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_ThrowsException_FriendlyPiece) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnCapturingTest.txt");
+		auto str = slurp("../../UnitTests/PawnCapturingTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -280,7 +280,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_EnPassant) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnEnPassantTest.txt");
+		auto str = slurp("../../UnitTests/PawnEnPassantTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -300,7 +300,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnCapturing, Capture_EnPassant_ThrowsException_TooLate) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnEnPassantTest.txt");
+		auto str = slurp("../../UnitTests/PawnEnPassantTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -316,7 +316,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnUpgrade, UpgradeTo_Queen) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnUpgradeTest.txt");
+		auto str = slurp("../../UnitTests/PawnUpgradeTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -332,7 +332,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnUpgrade, UpgradeTo_Rook) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnUpgradeTest.txt");
+		auto str = slurp("../../UnitTests/PawnUpgradeTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -348,7 +348,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnUpgrade, UpgradeTo_Bishop) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnUpgradeTest.txt");
+		auto str = slurp("../../UnitTests/PawnUpgradeTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -367,7 +367,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnUpgrade, UpgradeTo_Knight) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnUpgradeTest.txt");
+		auto str = slurp("../../UnitTests/PawnUpgradeTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -383,7 +383,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnUpgrade, UpgradeTo_King_ThrowException) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnUpgradeTest.txt");
+		auto str = slurp("../../UnitTests/PawnUpgradeTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -393,7 +393,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnUpgrade, NoTarget_ThrowException) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnUpgradeTest.txt");
+		auto str = slurp("../../UnitTests/PawnUpgradeTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -403,7 +403,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnUpgrade, OccupiedTarget_ThrowException) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnUpgradeTest.txt");
+		auto str = slurp("../../UnitTests/PawnUpgradeTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);
@@ -413,7 +413,7 @@ namespace PawnTests {
 	}
 
 	TEST(PawnUpgrade, UpgradeTo_Queen_WithCapture) {
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\PawnUpgradeTest.txt");
+		auto str = slurp("../../UnitTests/PawnUpgradeTest.txt");
 		EXPECT_NE(0, str.length());
 		// Arrange
 		StateManager* state = new StateManager(str);

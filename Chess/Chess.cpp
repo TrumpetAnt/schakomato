@@ -20,8 +20,8 @@ int main()
 		try {
 			state->Move(s_in);
 		}
-		catch (exception ex) {
-			cout << "Illegal move" << endl;
+		catch (const std::exception& ex) {
+			cout << "Illegal move: " << ex.what() << endl;
 		}
 	}
 }

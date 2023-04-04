@@ -30,13 +30,15 @@ private:
 	Square whiteKingLocation = Square{'\0',0};
 	Square blackKingLocation = Square{ '\0',0 };
 
-	bool CheckStateForCheck();
+	bool CheckStateForCheck(MoveCommand command, int piecePosition, int enPassantTarget);
 	std::vector<int>* FindPieceFromTarget(MoveCommand command);
 	std::vector<int>* FindPawnFromSourceSquare(MoveCommand command);
 	std::vector<int>* FindKnightFromSourceSquare(MoveCommand command);
 	std::vector<int>* FindKingPieceFromSourceSquare(MoveCommand command);
 	std::vector<int>* FindPieceFromSourceSquare(MoveCommand command, DirectionalIterator* directionalIterator);
 	void BaseMoveValidation(MoveCommand command);
+	std::unique_ptr<StateManager> Clone();
+	void ExecuteMove(MoveCommand command, int piecePosition, int enPassantTarget);
 
 
 	MoveCommand MoveFromInput(std::string notation);

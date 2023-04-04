@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{75563e86-63d6-4ae7-aa04-871ebb416e39}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BishopTests.cpp" />
+    <ClCompile Include="KingTest.cpp" />
     <ClCompile Include="KnightTests.cpp" />
     <ClCompile Include="PawnTests.cpp" />
     <ClCompile Include="QueenMovement.cpp" />
@@ -59,6 +60,8 @@
   <ItemGroup>
     <Text Include="BishopCaptureTest.txt" />
     <Text Include="BishopMovementTest.txt" />
+    <Text Include="KingRulesTest.txt" />
+    <Text Include="KingRulesTest2.txt" />
     <Text Include="KnightMovementTest.txt" />
     <Text Include="PawnCapturingTest.txt" />
     <Text Include="PawnEnPassantTest.txt" />
@@ -98,13 +101,13 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Source\Chess\Chess\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Chess\;C:\Source\Chess\Chess\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>StateManager.obj;Renderer.obj;Piece.obj;Pawn.obj;Knight.obj;Bishop.obj;Rook.obj;Queen.obj;King.obj;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Source\Chess\Chess\x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Chess\x64\Debug\;C:\Source\Chess\Chess\x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

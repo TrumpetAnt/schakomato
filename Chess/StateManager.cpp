@@ -47,22 +47,45 @@ StateManager::StateManager() {
 	blackKingLocation = Square{ 'e',8 };
 }
 
-bool StateManager::CheckStateForCheck() {
-	// TODO: Promote pawn to pieces which put king in check, i.e. queen and knight
-	MoveCommand command;
-	command.enPassant = false;
-	command.capture = true;
-	command.target = currentPlayer == White ? blackKingLocation : whiteKingLocation;
-	command.promotion = command.target.rank == (currentPlayer == White ? 8 : 1);
-	command.promotedTo = QueenPiece;
-	command.disambiguation = Square{ '\0',0 };
-	if (command.target == Square{ '\0',0 }) {
+StateManager::StateManager(std::string boardString) {
+	board = std::make_unique<Piece* []>(64);
+	auto pieceString = boardString.substr(0, 4);
+	while (pieceString.length() == 4) {
+		int position = SquareToInt(Square{ pieceString[2], pieceString[3] - '0' });
+		auto piece = CreateNewPiece(GetPieceType(pieceString.substr(1, 1), false), pieceString[0] - '0' == 0 ? White : Black);
+		board[position] = piece;
+		
+		if (piece->GetPieceType() == KingPiece) {
+			if (piece->GetPlayer() == White) {
+				this->whiteKingLocation = IntToSquare(position);
+			}
+			else {
+				this->blackKingLocation = IntToSquare(position);
+			}
+		}
+
+		boardString = boardString.substr(4);
+		pieceString = boardString.substr(0, 4);
+	}
+}
+
+bool StateManager::CheckStateForCheck(MoveCommand command, int piecePosition, int enPassantTarget) {
+	auto stateClone = this->Clone();
+	stateClone->ExecuteMove(command, piecePosition, enPassantTarget);
+	
+	MoveCommand testCommand;
+	testCommand.enPassant = false;
+	testCommand.capture = true;
+	testCommand.target = stateClone->currentPlayer == White ? stateClone->blackKingLocation : stateClone->whiteKingLocation;
+	testCommand.promotion = testCommand.target.rank == (stateClone->currentPlayer == White ? 8 : 1);
+	testCommand.promotedTo = QueenPiece;
+	testCommand.disambiguation = Square{ '\0',0 };
+	if (testCommand.target == Square{ '\0',0 }) {
 		return false;
 	}
-
 	for (PieceType p : PieceTypeIterator()) {
-		command.type = p;
-		std::vector<int>* pieces = FindPieceFromTarget(command);
+		testCommand.type = p;
+		std::vector<int>* pieces = stateClone->FindPieceFromTarget(testCommand);
 		bool inCheck = pieces->size() > 0;
 		pieces->clear();
 		delete pieces;
@@ -70,20 +93,8 @@ bool StateManager::CheckStateForCheck() {
 			return true;
 		}
 	}
-	
+
 	return false;
-}
-
-StateManager::StateManager(std::string boardString) {
-	board = std::make_unique<Piece* []>(64);
-	auto pieceString = boardString.substr(0, 4);
-	while (pieceString.length() == 4) {
-		board[SquareToInt(Square{ pieceString[2], pieceString[3] - '0' })] =
-			CreateNewPiece(GetPieceType(pieceString.substr(1, 1), false), pieceString[0] - '0' == 0 ? White : Black);
-
-		boardString = boardString.substr(4);
-		pieceString = boardString.substr(0, 4);
-	}
 }
 
 std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
@@ -94,6 +105,15 @@ std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
 		}
 	}
 	return result;
+}
+
+std::unique_ptr<StateManager> StateManager::Clone() {
+	auto cloneState = std::make_unique<StateManager>();
+	cloneState->board = this->GetStateCopy();
+	cloneState->whiteKingLocation = this->whiteKingLocation;
+	cloneState->blackKingLocation = this->blackKingLocation;
+	cloneState->currentPlayer = this->currentPlayer;
+	return cloneState;
 }
 
 std::vector<int>* StateManager::FindPawnFromSourceSquare(MoveCommand command) {
@@ -323,10 +343,13 @@ void StateManager::Move(std::string notation)
 		? SquareToInt(command.target)
 		: -1;
 
-	if (CheckStateForCheck()) {
-		throw std::invalid_argument("what in gods name");
+	if (this->CheckStateForCheck(command, piecePosition, enPassantTarget)) {
+		throw std::invalid_argument("Illegal move, cannot put king in check.");
 	}
+	this->ExecuteMove(command, piecePosition, enPassantTarget);
+}
 
+void StateManager::ExecuteMove(MoveCommand command, int piecePosition, int enPassantTarget) {
 	if (command.capture && !command.enPassant) {
 		delete board[SquareToInt(command.target)];
 	}
@@ -335,6 +358,14 @@ void StateManager::Move(std::string notation)
 	if (command.enPassant) {
 		delete board[enPassantTarget];
 		board[enPassantTarget] = nullptr;
+	}
+	if (command.type == KingPiece) {
+		if (currentPlayer == White) {
+			whiteKingLocation = command.target;
+		}
+		else {
+			blackKingLocation = command.target;
+		}
 	}
 	currentPlayer = 1 - currentPlayer;
 }

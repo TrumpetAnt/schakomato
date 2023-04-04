@@ -15,7 +15,7 @@ namespace RookTests {
 
 	TEST(RookMovement, NoCapture_BothPlayers) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\RookMovementTest.txt");
+		auto str = slurp("../../UnitTests/RookMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -41,7 +41,7 @@ namespace RookTests {
 
 	TEST(RookMovement, NoCapture_FriendlyPiece_ThrowException) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\RookMovementTest.txt");
+		auto str = slurp("../../UnitTests/RookMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -50,7 +50,7 @@ namespace RookTests {
 
 	TEST(RookMovement, NoCapture_MoveOverPiece_ThrowException) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\RookMovementTest.txt");
+		auto str = slurp("../../UnitTests/RookMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -59,7 +59,7 @@ namespace RookTests {
 
 	TEST(RookCapture, Captures) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\RookCaptureTest.txt");
+		auto str = slurp("../../UnitTests/RookCaptureTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -80,7 +80,7 @@ namespace RookTests {
 
 	TEST(RookCapture, CaptureDisambiguation) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\RookCaptureTest.txt");
+		auto str = slurp("../../UnitTests/RookCaptureTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
@@ -103,7 +103,7 @@ namespace RookTests {
 
 	TEST(RookCapture, CaptureDisambiguation_MissingSource_ThrowsException) {
 		// Arrange
-		auto str = slurp("C:\\Source\\Chess\\UnitTests\\RookMovementTest.txt");
+		auto str = slurp("../../UnitTests/RookMovementTest.txt");
 		StateManager* state = new StateManager(str);
 
 		// Act
