@@ -5,6 +5,7 @@
 #include "PieceTypes.h"
 #include "Square.h"
 #include "Color.h"
+#include "MoveCommand.h"
 
 
 class Piece
@@ -14,7 +15,7 @@ public:
 	PieceType GetPieceType() { return type; };
 	Color GetPlayer() { return player; }
 	virtual Piece* Copy() = 0;
-	virtual int PossibleMoves(Piece** board, std::vector<Square>*movesVector) = 0;
+	virtual std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(Piece** board, Square position) = 0;
 private:
 	PieceType type;
 	Color player;

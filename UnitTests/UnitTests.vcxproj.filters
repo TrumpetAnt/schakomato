@@ -21,6 +21,9 @@
     <Filter Include="Testdata">
       <UniqueIdentifier>{b3883bf0-110e-46f0-85ec-3538d9bee088}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Testdata\CheckMates">
+      <UniqueIdentifier>{85f06c1b-229c-403b-bfd9-2432b5d061df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="PawnCapturingTest.txt">
@@ -59,6 +62,11 @@
     <Text Include="KingRulesTest.txt">
       <Filter>Testdata</Filter>
     </Text>
-    <Text Include="KingRulesTest2.txt" />
+    <Text Include="BackRankRook.txt">
+      <Filter>Testdata\CheckMates</Filter>
+    </Text>
+    <Text Include="KingRulesTest2.txt">
+      <Filter>Testdata</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -318,8 +318,11 @@ void StateManager::Move(std::string notation)
 	// TODO: Add regex input validation
 	// TODO: Draw offer
 	// TODO: Castling  
-	// TODO: Check-mate
 	// TODO: End of game 
+
+	if (Completed()) {
+		throw std::invalid_argument("Game over");
+	}
 
 	MoveCommand command = MoveFromInput(notation);
 	BaseMoveValidation(command);
@@ -347,6 +350,8 @@ void StateManager::Move(std::string notation)
 		throw std::invalid_argument("Illegal move, cannot put king in check.");
 	}
 	this->ExecuteMove(command, piecePosition, enPassantTarget);
+
+	this->CheckForMate();
 }
 
 void StateManager::ExecuteMove(MoveCommand command, int piecePosition, int enPassantTarget) {
@@ -368,4 +373,25 @@ void StateManager::ExecuteMove(MoveCommand command, int piecePosition, int enPas
 		}
 	}
 	currentPlayer = 1 - currentPlayer;
+}
+
+std::unique_ptr<std::vector<Piece*>> StateManager::Pieces(Color player) {
+	auto res = std::make_unique< std::vector<Piece*>>(std::vector<Piece*>());
+
+	for (int position = 0; position < 64; position++) {
+		auto piece = board[position];
+		Square temp = IntToSquare(position);
+		if (piece != nullptr && piece->GetPlayer() == player) {
+			res->push_back(piece);
+		}
+	}
+
+	return res;
+}
+
+void StateManager::CheckForMate() {
+	auto pieces = Pieces(GetCurrentPlayer());
+	for (auto piece : *pieces) {
+		
+	}
 }

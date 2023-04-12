@@ -1,11 +1,16 @@
 #pragma once
 #include "Piece.h"
+#include "DirectionIterators.h"
+#include "SquareSearchIterator.h"
+#include "Square.h"
+
+
 class Bishop :
     public Piece
 {
 public:
     Bishop(Color player) : Piece{ BishopPiece, player } {};
     Bishop* Copy() { return new Bishop(GetPlayer()); };
-    int PossibleMoves(Piece** board, std::vector<Square>* movesVector);
+    std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(Piece** board, Square position);
 };
 

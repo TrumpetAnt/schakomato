@@ -24,6 +24,9 @@ public:
 	void Move(std::string notation);
 	std::unique_ptr<Piece* []> GetStateCopy();
 	Color GetCurrentPlayer() { return currentPlayer == 0 ? White : Black; };
+	bool Completed() { return false; }
+	Color GetWinner() { throw NotImplementedException(); }
+	std::unique_ptr<std::vector<Piece*>> Pieces(Color player);
 private:
 	std::unique_ptr<Piece*[]> board;
 	int currentPlayer = 0;
@@ -39,6 +42,7 @@ private:
 	void BaseMoveValidation(MoveCommand command);
 	std::unique_ptr<StateManager> Clone();
 	void ExecuteMove(MoveCommand command, int piecePosition, int enPassantTarget);
+	void CheckForMate();
 
 
 	MoveCommand MoveFromInput(std::string notation);

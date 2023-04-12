@@ -90,4 +90,25 @@ namespace KingTest {
 		// Act & Assert
 		EXPECT_ANY_THROW(state->Move("Kd3"));
 	}
+
+	TEST(StateFunctions, PieceCount_WhiteAndBlack) {
+		auto str = slurp("../../UnitTests/BackRankRook.txt");
+		StateManager* state = new StateManager(str);
+
+		EXPECT_EQ(1, state->Pieces(White)->size());
+		EXPECT_EQ(3, state->Pieces(Black)->size());
+	}
+
+	TEST(KingRules, DetectCheckMate_BackRankRook) {
+		// Arrange
+		auto str = slurp("../../UnitTests/BackRankRook.txt");
+		StateManager* state = new StateManager(str);
+
+		// Act
+		state->Move("Ra8");
+
+		// Assert
+		EXPECT_TRUE(state->Completed());
+		EXPECT_EQ(White, state->GetWinner());
+	}
 }

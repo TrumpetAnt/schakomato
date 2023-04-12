@@ -58,6 +58,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="BackRankRook.txt" />
     <Text Include="BishopCaptureTest.txt" />
     <Text Include="BishopMovementTest.txt" />
     <Text Include="KingRulesTest.txt" />
