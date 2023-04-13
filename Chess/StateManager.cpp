@@ -69,6 +69,15 @@ StateManager::StateManager(std::string boardString) {
 	}
 }
 
+StateManager::~StateManager() {
+	for (int i = 0; i < 64; i++) {
+		if (board[i] != nullptr) {
+			delete board[i];
+		}
+	}
+	board.reset();
+}
+
 bool StateManager::CheckStateForCheck(MoveCommand command, int piecePosition, int enPassantTarget) {
 	auto stateClone = this->Clone();
 	stateClone->ExecuteMove(command, piecePosition, enPassantTarget);
@@ -94,6 +103,8 @@ bool StateManager::CheckStateForCheck(MoveCommand command, int piecePosition, in
 		}
 	}
 
+	stateClone.reset();
+
 	return false;
 }
 
@@ -104,7 +115,7 @@ std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
 			result[i] = board[i]->Copy();
 		}
 	}
-	return result;
+	return std::move(result);
 }
 
 std::unique_ptr<StateManager> StateManager::Clone() {
@@ -113,7 +124,7 @@ std::unique_ptr<StateManager> StateManager::Clone() {
 	cloneState->whiteKingLocation = this->whiteKingLocation;
 	cloneState->blackKingLocation = this->blackKingLocation;
 	cloneState->currentPlayer = this->currentPlayer;
-	return cloneState;
+	return std::move(cloneState);
 }
 
 std::vector<int>* StateManager::FindPawnFromSourceSquare(MoveCommand command) {
@@ -318,7 +329,6 @@ void StateManager::Move(std::string notation)
 	// TODO: Add regex input validation
 	// TODO: Draw offer
 	// TODO: Castling  
-	// TODO: End of game 
 
 	if (Completed()) {
 		throw std::invalid_argument("Game over");
@@ -346,12 +356,14 @@ void StateManager::Move(std::string notation)
 		? SquareToInt(command.target)
 		: -1;
 
-	if (this->CheckStateForCheck(command, piecePosition, enPassantTarget)) {
+	if (CheckStateForCheck(command, piecePosition, enPassantTarget)) {
 		throw std::invalid_argument("Illegal move, cannot put king in check.");
 	}
-	this->ExecuteMove(command, piecePosition, enPassantTarget);
+	ExecuteMove(command, piecePosition, enPassantTarget);
 
-	this->CheckForMate();
+	if (CheckForMate()) {
+		completed = true;
+	}
 }
 
 void StateManager::ExecuteMove(MoveCommand command, int piecePosition, int enPassantTarget) {
@@ -386,12 +398,27 @@ std::unique_ptr<std::vector<Piece*>> StateManager::Pieces(Color player) {
 		}
 	}
 
-	return res;
+	return std::move(res);
 }
 
-void StateManager::CheckForMate() {
-	auto pieces = Pieces(GetCurrentPlayer());
-	for (auto piece : *pieces) {
-		
+bool StateManager::CheckForMate() {
+	// TODO make it possible for draw
+	int enPassantTarget = 0;
+	for (int position = 0; position < 64; position++) {
+		auto piece = board[position];
+		if (piece != nullptr && piece->GetPlayer() == currentPlayer) {
+			auto possibleMoves = piece->PossibleMoves(std::move(GetStateCopy()), IntToSquare(position));
+			for (auto move : *possibleMoves) {
+				if (piece->GetPieceType() == PawnPiece && move.enPassant) {
+					int playerDirection = currentPlayer == White ? -1 : 1;
+					enPassantTarget = SquareToInt(Square{ move.target.file, move.target.rank + playerDirection });
+				}
+				if (!CheckStateForCheck(move, position, enPassantTarget)) {
+					return false;
+				}
+			}
+			possibleMoves.reset();
+		}
 	}
+	return true;
 }

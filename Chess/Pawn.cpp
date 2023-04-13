@@ -17,8 +17,8 @@ MoveCommand Pawn::CreateMoveCommand(Square target, bool capture, PieceType promo
 	return command;
 }
 
-std::unique_ptr<std::vector<MoveCommand>> Pawn::PossibleMoves(Piece** board, Square position) {
-	auto possibleMoves = std::make_unique<std::vector<MoveCommand>>();
+std::unique_ptr<std::vector<MoveCommand>> Pawn::PossibleMoves(std::unique_ptr<Piece*[]> board, Square position) {
+	auto possibleMoves = new std::vector<MoveCommand>();
 
 	int rankModifier = GetPlayer() == White ? 1 : -1;
 	auto probe = Square{ position.file, position.rank + rankModifier };
@@ -54,10 +54,10 @@ std::unique_ptr<std::vector<MoveCommand>> Pawn::PossibleMoves(Piece** board, Squ
 			possibleMoves->end()->enPassant = true;
 		}
 	}
-	return possibleMoves;
+	return std::make_unique<std::vector<MoveCommand>>(*possibleMoves);
 }
 
-bool Pawn::CaptureIfPossible(Piece* targetPiece, const Square& target, std::unique_ptr<std::vector<MoveCommand>>& possibleMoves)
+bool Pawn::CaptureIfPossible(Piece* targetPiece, const Square& target, std::vector<MoveCommand>* possibleMoves)
 {
 	if (targetPiece != nullptr && targetPiece->GetPlayer() != GetPlayer()) {
 		possibleMoves->push_back(CreateMoveCommand(target, true));

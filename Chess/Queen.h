@@ -10,6 +10,6 @@ class Queen :
 public:
     Queen(Color player) : Piece{ QueenPiece, player } {}
     Queen* Copy() { return new Queen(GetPlayer()); };
-    std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(Piece** board, Square position);
+    std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(std::unique_ptr<Piece*[]> board, Square position);
 };
 

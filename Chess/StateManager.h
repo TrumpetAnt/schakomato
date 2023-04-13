@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <utility>
 #include "Piece.h"
 #include "PieceTypes.h"
 #include "PieceUtils.h"
@@ -21,17 +22,22 @@ class StateManager
 public:
 	StateManager();
 	StateManager(std::string boardString);
+	~StateManager();
+	StateManager(StateManager&) = default;
+
 	void Move(std::string notation);
 	std::unique_ptr<Piece* []> GetStateCopy();
 	Color GetCurrentPlayer() { return currentPlayer == 0 ? White : Black; };
-	bool Completed() { return false; }
-	Color GetWinner() { throw NotImplementedException(); }
+	bool Completed() { return completed; }
+	Color GetWinner() { if (!completed) { throw std::invalid_argument("Game not finished"); } return winner; }
 	std::unique_ptr<std::vector<Piece*>> Pieces(Color player);
 private:
 	std::unique_ptr<Piece*[]> board;
 	int currentPlayer = 0;
 	Square whiteKingLocation = Square{'\0',0};
 	Square blackKingLocation = Square{ '\0',0 };
+	bool completed = false;
+	Color winner;
 
 	bool CheckStateForCheck(MoveCommand command, int piecePosition, int enPassantTarget);
 	std::vector<int>* FindPieceFromTarget(MoveCommand command);
@@ -42,7 +48,7 @@ private:
 	void BaseMoveValidation(MoveCommand command);
 	std::unique_ptr<StateManager> Clone();
 	void ExecuteMove(MoveCommand command, int piecePosition, int enPassantTarget);
-	void CheckForMate();
+	bool CheckForMate();
 
 
 	MoveCommand MoveFromInput(std::string notation);

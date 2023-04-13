@@ -1,7 +1,7 @@
 #include "Queen.h"
 
-std::unique_ptr<std::vector<MoveCommand>> Queen::PossibleMoves(Piece** board, Square position) {
-	auto possibleMoves = std::make_unique<std::vector<MoveCommand>>();
+std::unique_ptr<std::vector<MoveCommand>> Queen::PossibleMoves(std::unique_ptr<Piece*[]> board, Square position) {
+	auto possibleMoves = new std::vector<MoveCommand>();
 
 	for (int direction : DirectionalIterator()) {
 		for (Square probe : SquareSearchIterator(position, direction)) {
@@ -18,5 +18,5 @@ std::unique_ptr<std::vector<MoveCommand>> Queen::PossibleMoves(Piece** board, Sq
 		}
 	}
 
-	return possibleMoves;
+	return std::make_unique<std::vector<MoveCommand>>(*possibleMoves);
 }

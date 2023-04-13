@@ -1,8 +1,8 @@
 #include "Knight.h"
 
 
-std::unique_ptr<std::vector<MoveCommand>> Knight::PossibleMoves(Piece** board, Square position) {
-	auto possibleMoves = std::make_unique<std::vector<MoveCommand>>();
+std::unique_ptr<std::vector<MoveCommand>> Knight::PossibleMoves(std::unique_ptr<Piece*[]> board, Square position) {
+	auto possibleMoves = new std::vector<MoveCommand>();
 
 	Square targetSquares[8] = {
 		Square{(char)((int)position.file + 1), position.rank + 2},
@@ -30,6 +30,6 @@ std::unique_ptr<std::vector<MoveCommand>> Knight::PossibleMoves(Piece** board, S
 		MoveCommand command = { Square{'\0', 0}, targetSquares[i], BishopPiece };
 		possibleMoves->push_back(command);
 	}
-	return possibleMoves;
+	return std::make_unique<std::vector<MoveCommand>>(*possibleMoves);
 }
 

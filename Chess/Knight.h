@@ -9,6 +9,6 @@ class Knight :
 public:
     Knight(Color player) : Piece{ KnightPiece, player } {};
     Knight* Copy() { return new Knight(GetPlayer()); };
-    std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(Piece** board, Square position);
+    std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(std::unique_ptr<Piece*[]> board, Square position);
 };
 

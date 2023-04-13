@@ -1,8 +1,8 @@
 #include "Rook.h"
 
 
-std::unique_ptr<std::vector<MoveCommand>> Rook::PossibleMoves(Piece** board, Square position) {
-	auto possibleMoves = std::make_unique<std::vector<MoveCommand>>();
+std::unique_ptr<std::vector<MoveCommand>> Rook::PossibleMoves(std::unique_ptr<Piece*[]> board, Square position) {
+	auto possibleMoves = new std::vector<MoveCommand>();
 
 	for (int direction : LevelIterator()) {
 		for (Square probe : SquareSearchIterator(position, direction)) {
@@ -19,5 +19,5 @@ std::unique_ptr<std::vector<MoveCommand>> Rook::PossibleMoves(Piece** board, Squ
 		}
 	}
 
-	return possibleMoves;
+	return std::make_unique<std::vector<MoveCommand>>(*possibleMoves);
 }

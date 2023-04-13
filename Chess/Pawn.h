@@ -9,9 +9,9 @@ class Pawn :
 public:
     Pawn(Color player) : Piece{ PawnPiece, player } {};
     Pawn* Copy() { return new Pawn(GetPlayer()); };
-    std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(Piece** board, Square position);
+    std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(std::unique_ptr<Piece*[]> board, Square position);
 private:
-    bool CaptureIfPossible(Piece* capturingPieceB, const Square& probeCaptureRight, std::unique_ptr<std::vector<MoveCommand>>& possibleMoves);
+    bool CaptureIfPossible(Piece* capturingPieceB, const Square& probeCaptureRight, std::vector<MoveCommand>* possibleMoves);
     MoveCommand CreateMoveCommand(Square target, bool capture, PieceType promotedTo = QueenPiece);
 };
 
