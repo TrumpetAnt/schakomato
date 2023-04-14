@@ -69,6 +69,13 @@ StateManager::StateManager(std::string boardString) {
 	}
 }
 
+StateManager::StateManager(const StateManager& other) {
+	board = std::move(other.GetStateCopy());
+	whiteKingLocation = other.whiteKingLocation;
+	blackKingLocation = other.blackKingLocation;
+	currentPlayer = other.currentPlayer;
+}
+
 StateManager::~StateManager() {
 	for (int i = 0; i < 64; i++) {
 		if (board[i] != nullptr) {
@@ -79,7 +86,7 @@ StateManager::~StateManager() {
 }
 
 bool StateManager::CheckStateForCheck(MoveCommand command, int piecePosition, int enPassantTarget) {
-	auto stateClone = this->Clone();
+	auto stateClone = Clone();
 	stateClone->ExecuteMove(command, piecePosition, enPassantTarget);
 	
 	MoveCommand testCommand;
@@ -90,6 +97,7 @@ bool StateManager::CheckStateForCheck(MoveCommand command, int piecePosition, in
 	testCommand.promotedTo = QueenPiece;
 	testCommand.disambiguation = Square{ '\0',0 };
 	if (testCommand.target == Square{ '\0',0 }) {
+		delete stateClone;
 		return false;
 	}
 	for (PieceType p : PieceTypeIterator()) {
@@ -99,16 +107,17 @@ bool StateManager::CheckStateForCheck(MoveCommand command, int piecePosition, in
 		pieces->clear();
 		delete pieces;
 		if (inCheck) {
+			delete stateClone;
 			return true;
 		}
 	}
 
-	stateClone.reset();
+	delete stateClone;
 
 	return false;
 }
 
-std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
+std::unique_ptr<Piece* []> StateManager::GetStateCopy() const {
 	auto result = std::make_unique<Piece* []>(64);
 	for (int i = 0; i < 64; i++) {
 		if (board[i] != nullptr) {
@@ -118,13 +127,13 @@ std::unique_ptr<Piece* []> StateManager::GetStateCopy() {
 	return std::move(result);
 }
 
-std::unique_ptr<StateManager> StateManager::Clone() {
-	auto cloneState = std::make_unique<StateManager>();
-	cloneState->board = this->GetStateCopy();
-	cloneState->whiteKingLocation = this->whiteKingLocation;
-	cloneState->blackKingLocation = this->blackKingLocation;
-	cloneState->currentPlayer = this->currentPlayer;
-	return std::move(cloneState);
+StateManager* StateManager::Clone() const {
+	auto cloneState = new StateManager();
+	cloneState->board = std::move(GetStateCopy());
+	cloneState->whiteKingLocation = whiteKingLocation;
+	cloneState->blackKingLocation = blackKingLocation;
+	cloneState->currentPlayer = currentPlayer;
+	return cloneState;
 }
 
 std::vector<int>* StateManager::FindPawnFromSourceSquare(MoveCommand command) {

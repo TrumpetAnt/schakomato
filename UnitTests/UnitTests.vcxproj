@@ -107,7 +107,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>StateManager.obj;Renderer.obj;Piece.obj;Pawn.obj;Knight.obj;Bishop.obj;Rook.obj;Queen.obj;King.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>StateManager.obj;Renderer.obj;Pawn.obj;Knight.obj;Bishop.obj;Rook.obj;Queen.obj;King.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Chess\x64\Debug\;C:\Source\Chess\Chess\x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

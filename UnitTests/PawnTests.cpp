@@ -162,6 +162,8 @@ namespace PawnTests {
 		EXPECT_EQ(nullptr, result);
 		result = board[SquareToInt(Square{ 'd', 4 })];
 		EXPECT_EQ(nullptr, result);
+
+		board.reset();
 	}
 
 	TEST(PawnCapturing, Capture_SingleMove) {

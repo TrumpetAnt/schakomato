@@ -17,7 +17,7 @@ MoveCommand Pawn::CreateMoveCommand(Square target, bool capture, PieceType promo
 	return command;
 }
 
-std::unique_ptr<std::vector<MoveCommand>> Pawn::PossibleMoves(std::unique_ptr<Piece*[]> board, Square position) {
+std::unique_ptr<std::vector<MoveCommand>> Pawn::PossibleMoves(std::unique_ptr<Piece* []> board, Square position) {
 	auto possibleMoves = new std::vector<MoveCommand>();
 
 	int rankModifier = GetPlayer() == White ? 1 : -1;
@@ -26,42 +26,46 @@ std::unique_ptr<std::vector<MoveCommand>> Pawn::PossibleMoves(std::unique_ptr<Pi
 
 	if (pieceAtTarget == nullptr) {
 		possibleMoves->push_back(CreateMoveCommand(probe, false));
-		if (possibleMoves->end()->promotion) {
+		if (possibleMoves->back().promotion) {
 			possibleMoves->push_back(CreateMoveCommand(probe, false, KnightPiece));
 		}
 	}
-	probe = Square{ position.file, position.rank + rankModifier * 2};
+	probe = Square{ position.file, position.rank + rankModifier * 2 };
 	auto secondPiece = board[SquareToInt(probe)];
 	if (pieceAtTarget == nullptr && secondPiece == nullptr && AtInitialPosition(position.rank, GetPlayer())) {
 		possibleMoves->push_back(CreateMoveCommand(probe, false));
-		if (possibleMoves->end()->promotion) {
+		if (possibleMoves->back().promotion) {
 			possibleMoves->push_back(CreateMoveCommand(probe, false, KnightPiece));
 		}
 	}
 	auto probeCaptureLeft = Square{ (char)(position.file - 1), position.rank + rankModifier };
 	auto probeCaptureRight = Square{ (char)(position.file + 1), position.rank + rankModifier };
-	auto targetLeft = board[SquareToInt(probeCaptureLeft)];
-	auto targetRight = board[SquareToInt(probeCaptureRight)];
-	if (!CaptureIfPossible(targetLeft, probeCaptureLeft, possibleMoves)) {
-		targetLeft = board[SquareToInt(Square{ probeCaptureLeft.file, probeCaptureLeft.rank + rankModifier })];
-		if (CaptureIfPossible(targetLeft, probeCaptureLeft, possibleMoves)) {
-			possibleMoves->end()->enPassant = true;
+	if (SquareInBoard(&probeCaptureLeft)) {
+		auto targetLeft = board[SquareToInt(probeCaptureLeft)];
+		if (!CaptureIfPossible(targetLeft, probeCaptureLeft, possibleMoves)) {
+			targetLeft = board[SquareToInt(Square{ probeCaptureLeft.file, probeCaptureLeft.rank + rankModifier })];
+			if (CaptureIfPossible(targetLeft, probeCaptureLeft, possibleMoves)) {
+				possibleMoves->back().enPassant = true;
+			}
 		}
 	}
-	if (!CaptureIfPossible(targetRight, probeCaptureRight, possibleMoves)) {
-		targetRight = board[SquareToInt(Square{ probeCaptureRight.file, probeCaptureRight.rank + rankModifier })];
-		if (CaptureIfPossible(targetRight, probeCaptureRight, possibleMoves)) {
-			possibleMoves->end()->enPassant = true;
+	if (SquareInBoard(&probeCaptureRight)) {
+		auto targetRight = board[SquareToInt(probeCaptureRight)];
+		if (!CaptureIfPossible(targetRight, probeCaptureRight, possibleMoves)) {
+			targetRight = board[SquareToInt(Square{ probeCaptureRight.file, probeCaptureRight.rank + rankModifier })];
+			if (CaptureIfPossible(targetRight, probeCaptureRight, possibleMoves)) {
+				possibleMoves->back().enPassant = true;
+			}
 		}
 	}
 	return std::make_unique<std::vector<MoveCommand>>(*possibleMoves);
 }
 
-bool Pawn::CaptureIfPossible(Piece* targetPiece, const Square& target, std::vector<MoveCommand>* possibleMoves)
+bool Pawn::CaptureIfPossible(Piece* targetPiece, Square target, std::vector<MoveCommand>* possibleMoves)
 {
 	if (targetPiece != nullptr && targetPiece->GetPlayer() != GetPlayer()) {
 		possibleMoves->push_back(CreateMoveCommand(target, true));
-		if (possibleMoves->end()->promotion) {
+		if (possibleMoves->back().promotion) {
 			possibleMoves->push_back(CreateMoveCommand(target, true, KnightPiece));
 		}
 		return true;

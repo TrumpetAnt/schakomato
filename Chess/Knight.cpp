@@ -18,7 +18,7 @@ std::unique_ptr<std::vector<MoveCommand>> Knight::PossibleMoves(std::unique_ptr<
 	for (int i = 0; i < 8; i++) {
 		Square* sq = &targetSquares[i];
 		
-		if (SquareInBoard(sq)) {
+		if (!SquareInBoard(sq)) {
 			continue;
 		}
 		int squareInt = SquareToInt(targetSquares[i]);
