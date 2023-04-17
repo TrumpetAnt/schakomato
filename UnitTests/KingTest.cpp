@@ -95,34 +95,14 @@ namespace KingTest {
 		auto str = slurp("../../UnitTests/BackRankRook.txt");
 		StateManager* state = new StateManager(str);
 
-		EXPECT_EQ(1, state->Pieces(White)->size());
-		EXPECT_EQ(3, state->Pieces(Black)->size());
+		EXPECT_EQ(1, state->Pieces(White).size());
+		EXPECT_EQ(3, state->Pieces(Black).size());
 	}
 
 	TEST(KingRules, DetectCheckMate_BackRankRook) {
 		// Arrange
 		auto str = slurp("../../UnitTests/BackRankRook.txt");
 		StateManager* state = new StateManager(str);
-
-		Piece* arr[3] = { new Rook(White), new Pawn(White), new Pawn(Black) };
-
-		auto x = arr[0];
-		auto y = arr[1];
-		auto z = arr[2];
-
-
-		auto dynamicArray = std::make_unique<Piece * []>(3);
-
-		dynamicArray[0] = x;
-		dynamicArray[1] = y;
-		dynamicArray[2] = z;
-
-		auto a = dynamicArray[2];
-
-		dynamicArray[0] = nullptr;
-
-		auto b = dynamicArray[1];
-
 
 		// Act
 		state->Move("Ra8");

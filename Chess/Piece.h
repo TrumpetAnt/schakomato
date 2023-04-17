@@ -15,7 +15,7 @@ public:
 	PieceType GetPieceType() { return type; };
 	Color GetPlayer() { return player; }
 	virtual Piece* Copy() = 0;
-	virtual std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(std::unique_ptr<Piece*[]> board, Square position) = 0;
+	virtual std::vector<MoveCommand> PossibleMoves(std::vector<Piece*> board, Square position) = 0;
 private:
 	PieceType type;
 	Color player;

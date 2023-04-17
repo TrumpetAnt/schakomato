@@ -11,6 +11,6 @@ class Bishop :
 public:
     Bishop(Color player) : Piece{ BishopPiece, player } {};
     Bishop* Copy() { return new Bishop(GetPlayer()); };
-    std::unique_ptr<std::vector<MoveCommand>> PossibleMoves(std::unique_ptr<Piece*[]> board, Square position);
+    std::vector<MoveCommand> PossibleMoves(std::vector<Piece*> board, Square position);
 };
 

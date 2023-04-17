@@ -1,7 +1,7 @@
 #include "Bishop.h"
 
-std::unique_ptr<std::vector<MoveCommand>> Bishop::PossibleMoves(std::unique_ptr<Piece*[]> board, Square position) {
-	auto possibleMoves = new std::vector<MoveCommand>();
+std::vector<MoveCommand> Bishop::PossibleMoves(std::vector<Piece*> board, Square position) {
+	auto possibleMoves = std::vector<MoveCommand>();
 
 	for (int direction : DiagonalIterator()) {
 		for (Square probe : SquareSearchIterator(position, direction)) {
@@ -12,11 +12,11 @@ std::unique_ptr<std::vector<MoveCommand>> Bishop::PossibleMoves(std::unique_ptr<
 					break;
 				}
 				command.capture = true;
-				possibleMoves->push_back(command);
+				possibleMoves.push_back(command);
 			}
-			possibleMoves->push_back(command);
+			possibleMoves.push_back(command);
 		}
 	}
 
-	return std::make_unique<std::vector<MoveCommand>>(*possibleMoves);
+	return possibleMoves;
 }

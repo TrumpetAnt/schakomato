@@ -1,7 +1,7 @@
 #include "King.h"
 
-std::unique_ptr<std::vector<MoveCommand>> King::PossibleMoves(std::unique_ptr<Piece*[]> board, Square position) {
-	auto possibleMoves = new std::vector<MoveCommand>();
+std::vector<MoveCommand> King::PossibleMoves(std::vector<Piece*> board, Square position) {
+	auto possibleMoves = std::vector<MoveCommand>();
 
 	Square targetSquares[8] = {
 		Square{(char)((int)position.file + 1), position.rank + 1},
@@ -17,7 +17,7 @@ std::unique_ptr<std::vector<MoveCommand>> King::PossibleMoves(std::unique_ptr<Pi
 	for (int i = 0; i < 8; i++) {
 		Square* sq = &targetSquares[i];
 
-		if (SquareInBoard(sq)) {
+		if (!SquareInBoard(sq)) {
 			continue;
 		}
 		int squareInt = SquareToInt(targetSquares[i]);
@@ -27,8 +27,8 @@ std::unique_ptr<std::vector<MoveCommand>> King::PossibleMoves(std::unique_ptr<Pi
 			continue;
 		}
 		MoveCommand command = { Square{'\0', 0}, targetSquares[i], BishopPiece };
-		possibleMoves->push_back(command);
+		possibleMoves.push_back(command);
 	}
 
-	return std::make_unique<std::vector<MoveCommand>>(*possibleMoves);
+	return std::vector<MoveCommand>(possibleMoves);
 }

@@ -39,13 +39,13 @@ namespace PawnTests {
 		EXPECT_EQ(nullptr, result);
 	}
 
-	void AssertSquareNull(Square square, std::unique_ptr<Piece* []>* board) {
-		auto result = (*board)[SquareToInt(square)];
+	void AssertSquareNull(Square square, std::vector<Piece*> board) {
+		auto result = board[SquareToInt(square)];
 		EXPECT_EQ(nullptr, result);
 	}
 
-	void AssertSquareNotNull(Square square, std::unique_ptr<Piece* []>* board) {
-		auto result = (*board)[SquareToInt(square)];
+	void AssertSquareNotNull(Square square, std::vector<Piece*> board) {
+		auto result = board[SquareToInt(square)];
 		EXPECT_NE(nullptr, result);
 	}
 
@@ -59,8 +59,8 @@ namespace PawnTests {
 		// Assert
 		auto board = state->GetStateCopy();
 
-		AssertSquareNotNull(Square{ 'e', 3 }, &board);
-		AssertSquareNull(Square{ 'e', 2 }, &board);
+		AssertSquareNotNull(Square{ 'e', 3 }, board);
+		AssertSquareNull(Square{ 'e', 2 }, board);
 	}
 
 	TEST(PawnMovement, NoCapture_SingleMove_ThrowsException_MovingToCapture) {
@@ -163,7 +163,6 @@ namespace PawnTests {
 		result = board[SquareToInt(Square{ 'd', 4 })];
 		EXPECT_EQ(nullptr, result);
 
-		board.reset();
 	}
 
 	TEST(PawnCapturing, Capture_SingleMove) {
@@ -178,8 +177,8 @@ namespace PawnTests {
 		// Assert
 		auto board = state->GetStateCopy();
 
-		AssertSquareNotNull(Square{ 'b', 3 }, &board);
-		AssertSquareNull(Square{ 'a', 2 }, &board);
+		AssertSquareNotNull(Square{ 'b', 3 }, board);
+		AssertSquareNull(Square{ 'a', 2 }, board);
 
 		EXPECT_EQ(White, board[SquareToInt(Square{ 'b', 3 })]->GetPlayer());
 	}
@@ -196,8 +195,8 @@ namespace PawnTests {
 		// Assert
 		auto board = state->GetStateCopy();
 
-		AssertSquareNotNull(Square{ 'c', 3 }, &board);
-		AssertSquareNull(Square{ 'd', 2 }, &board);
+		AssertSquareNotNull(Square{ 'c', 3 }, board);
+		AssertSquareNull(Square{ 'd', 2 }, board);
 
 		EXPECT_EQ(White, board[SquareToInt(Square{ 'c', 3 })]->GetPlayer());
 	}
@@ -217,14 +216,14 @@ namespace PawnTests {
 		// Assert
 		auto board = state->GetStateCopy();
 
-		AssertSquareNotNull(Square{ 'b', 3 }, &board);
-		AssertSquareNotNull(Square{ 'a', 6 }, &board);
-		AssertSquareNotNull(Square{ 'c', 3 }, &board);
-		AssertSquareNotNull(Square{ 'd', 4 }, &board);
-		AssertSquareNull(Square{ 'a', 2 }, &board);
-		AssertSquareNull(Square{ 'b', 7 }, &board);
-		AssertSquareNull(Square{ 'd',2 }, &board);
-		AssertSquareNull(Square{ 'c', 5 }, &board);
+		AssertSquareNotNull(Square{ 'b', 3 }, board);
+		AssertSquareNotNull(Square{ 'a', 6 }, board);
+		AssertSquareNotNull(Square{ 'c', 3 }, board);
+		AssertSquareNotNull(Square{ 'd', 4 }, board);
+		AssertSquareNull(Square{ 'a', 2 }, board);
+		AssertSquareNull(Square{ 'b', 7 }, board);
+		AssertSquareNull(Square{ 'd',2 }, board);
+		AssertSquareNull(Square{ 'c', 5 }, board);
 
 		EXPECT_EQ(White, board[SquareToInt(Square{ 'b', 3 })]->GetPlayer());
 		EXPECT_EQ(Black, board[SquareToInt(Square{ 'a', 6 })]->GetPlayer());
@@ -244,8 +243,8 @@ namespace PawnTests {
 		// Assert
 		auto board = state->GetStateCopy();
 
-		AssertSquareNotNull(Square{ 'f', 8 }, &board);
-		AssertSquareNull(Square{ 'g', 7 }, &board);
+		AssertSquareNotNull(Square{ 'f', 8 }, board);
+		AssertSquareNull(Square{ 'g', 7 }, board);
 
 		EXPECT_EQ(White, board[SquareToInt(Square{ 'f', 8 })]->GetPlayer());
 		EXPECT_EQ(QueenPiece, board[SquareToInt(Square{ 'f', 8 })]->GetPieceType());
@@ -294,9 +293,9 @@ namespace PawnTests {
 		// Assert
 		auto board = state->GetStateCopy();
 
-		AssertSquareNotNull(Square{ 'b', 3 }, &board);
-		AssertSquareNull(Square{ 'b', 4 }, &board);
-		AssertSquareNull(Square{ 'a', 4 }, &board);
+		AssertSquareNotNull(Square{ 'b', 3 }, board);
+		AssertSquareNull(Square{ 'b', 4 }, board);
+		AssertSquareNull(Square{ 'a', 4 }, board);
 
 		EXPECT_EQ(Black, board[SquareToInt(Square{ 'b', 3 })]->GetPlayer());
 	}

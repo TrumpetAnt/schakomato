@@ -26,14 +26,14 @@ public:
 	~StateManager();
 
 	void Move(std::string notation);
-	std::unique_ptr<Piece*[]> GetStateCopy() const;
-	Color GetCurrentPlayer() { return currentPlayer == 0 ? White : Black; };
+	std::vector<Piece*> GetStateCopy() const;
+	Color GetCurrentPlayer() { return currentPlayer ; };
 	bool Completed() { return completed; }
 	Color GetWinner() { if (!completed) { throw std::invalid_argument("Game not finished"); } return winner; }
-	std::unique_ptr<std::vector<Piece*>> Pieces(Color player);
+	std::vector<Piece*> Pieces(Color player);
 private:
-	std::unique_ptr<Piece*[]> board;
-	int currentPlayer = 0;
+	std::vector<Piece*> board;
+	Color currentPlayer = White;
 	Square whiteKingLocation = Square{'\0',0};
 	Square blackKingLocation = Square{ '\0',0 };
 	bool completed = false;
@@ -46,7 +46,7 @@ private:
 	std::vector<int>* FindKingPieceFromSourceSquare(MoveCommand command);
 	std::vector<int>* FindPieceFromSourceSquare(MoveCommand command, DirectionalIterator* directionalIterator);
 	void BaseMoveValidation(MoveCommand command);
-	StateManager* Clone() const;
+	std::unique_ptr<StateManager> Clone() const;
 	void ExecuteMove(MoveCommand command, int piecePosition, int enPassantTarget);
 	bool CheckForMate();
 
